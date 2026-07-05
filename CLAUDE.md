@@ -90,7 +90,7 @@ All application documents are written in **English**.
 ## Workflow for New Job Applications
 1. User provides a job posting (URL or text)
 2. **Always evaluate fit first**: skills match, experience match, behavioral/culture match, and location/visa tier (`target-countries.md`). Present this assessment before proceeding.
-3. If good fit: tailor a resume into `cv/applications/<Company>/` by selecting the most relevant bullet/project variants (never fabricate). Generate a cover letter only if the posting requires one.
+3. If good fit: tailor a resume into `cv/applications/<Company>/` **by commenting existing bullet/project/section variants in or out only** (never fabricate). **Any actual content change to the resume `.tex` files — rewording, new bullets/metrics, reordering, header changes — must be proposed to David first and applied only after his approval.** Generate a cover letter only if the posting requires one.
 4. **Verify the document(s)** (see Verification Checklist below)
 5. Prepare interview talking points based on the role requirements and the profile's strengths
 

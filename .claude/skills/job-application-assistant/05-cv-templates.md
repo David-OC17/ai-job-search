@@ -3,6 +3,13 @@
 David uses a **custom single-page LaTeX resume**, not moderncv. Tailoring means
 **selecting from existing content variants**, never inventing new claims.
 
+> **Hard rule — comment in/out only.** Per-role tailoring is limited to **commenting
+> existing bullet/project/section variants in or out** (LaTeX `%`). Do **not** edit the
+> wording of any bullet, add new bullets/metrics/skills, reorder entries, or change the
+> header on your own. If any of that seems warranted, **propose it to David as a concrete
+> before/after diff and wait for his approval** before writing it. He owns the resume's
+> content; you only choose which existing pieces are visible.
+
 ## Template: custom `resume.cls`
 
 **Class:** `cv/resume.cls` - an `article`-based class (a4paper, 11pt) using

@@ -75,11 +75,12 @@ cv/applications/<Company>/
 ```
 
 Tailoring rules (single page, pdflatex):
-- **Select, don't fabricate.** Turn commented bullet/project variants on or off to match the posting's keywords and stack. Reorder projects so the most relevant appear first. Never add a skill, project, or metric David doesn't already have somewhere in the master.
-- Adjust `sections/skills.tex` ordering to lead with the stack the posting names.
+- **Comment in/out only — do NOT rewrite content.** The *only* change you make to the section `.tex` files autonomously is **commenting existing bullet/project/section variants in or out** (LaTeX `%`) to control what lands on the page. The master already ships alternate and shorter variants for this purpose.
+- **Any actual content change goes through David first.** If tailoring seems to need editing a bullet's wording, adding a new bullet/metric/skill, reordering entries, or changing the header — **stop and propose it to David as a concrete before/after diff, and wait for his approval before writing it.** Never silently reword or invent content.
+- Never add a skill, project, or metric David doesn't already have somewhere in the master.
 - Keep the header (name/contact) identical to the master.
-- Target **exactly one page** — this is a resume, not a 2-page CV.
-- Any mention of agentic coding or AI tooling must reference **Claude Code** by name.
+- Target **exactly one page** — this is a resume, not a 2-page CV. Achieve the fit purely by toggling which variants are commented in.
+- Any mention of agentic coding or AI tooling must reference **Claude Code** by name (and if adding such a mention requires new wording, propose it to David first per the rule above).
 
 ### Cover Letter — only when the posting asks for one (default: skip)
 
@@ -174,7 +175,7 @@ Return Part A and Part B together as a single structured message.
 
 Once the reviewer agent returns its feedback:
 
-1. **Apply Part A (structured edits) directly with the Edit tool.** Do NOT re-read the draft files — you already have them in context from Step 2, and the reviewer's `old_string` values were quoted from that same text. For each edit in the JSON array, call `Edit` with the given `file`, `old_string`, and `new_string`. Skip any whose rationale would require fabricating content.
+1. **Apply Part A (structured edits) directly with the Edit tool** — **but with a hard exception for the resume section files.** For edits to `cover_letters/...` (generated fresh per application), apply them directly. For edits to `cv/applications/<Company>/sections/*.tex`, **do NOT auto-apply any edit that changes wording or adds content** — the resume is David's own master content and only he approves text changes. The only resume edits you may apply autonomously are commenting existing variants in/out. Collect every reviewer edit that would reword/add/reorder resume content into a **proposal list** and present it to David (before/after diffs) for approval; apply only what he approves. Do NOT re-read the draft files — you already have them in context from Step 2. Skip any suggestion that would fabricate content.
 2. **Apply Part B (narrative suggestions)** using judgment. These need interpretation, not mechanical replacement. Walk through every Part B category the reviewer returned and address it:
    - **Missed keywords/requirements:** add the keyword or capability where it fits naturally in the CV or cover letter. Prefer the experience bullets (concrete evidence) over the profile statement (abstract claim).
    - **Company/department-specific angles:** weave the reviewer's research into the cover letter opening or motivation paragraph. Verify every company claim via WebFetch/WebSearch before including it — do not trust reviewer research at face value.
