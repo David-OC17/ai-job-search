@@ -16,7 +16,9 @@ Follow these steps **exactly in order**. Do not skip steps.
 
 - If `$ARGUMENTS` looks like a URL, use `WebFetch` to retrieve the job posting content.
 - If it is pasted text, use it directly.
-- Extract: **company name**, **role title**, **department** (if mentioned), **location**, and **language** of the posting (Danish or English).
+- Extract: **company name**, **role title**, **department** (if mentioned), and **location**.
+- Applications are **always written in English** (CV and cover letter alike), regardless of the posting language.
+- Check the location against `target-countries.md`. If it is Tier 4 or hits a hard requirement David can't meet (US-citizen/clearance/ITAR, on-site in a no-visa country), say so up front — the user may still choose to proceed, but flag it.
 - Store these for use throughout the workflow.
 
 ---
@@ -57,29 +59,38 @@ You already have `01-candidate-profile.md` and `04-job-evaluation.md` in context
 Read only the reference files you do not yet have:
 - `.claude/skills/job-application-assistant/03-writing-style.md`
 - `.claude/skills/job-application-assistant/05-cv-templates.md`
-- `.claude/skills/job-application-assistant/06-cover-letter-templates.md`
 
-Also read the most recent existing CV and cover letter files for concrete structural reference (one of each is enough):
-- Read any existing `cv/main_*.tex` file as a LaTeX template reference
-- Read any existing `cover_letters/cover_*.tex` or `cover_letters/Cover_*.tex` file as a template reference
+Also read the master CV so you know the full inventory of experience/projects/bullets available to select from:
+- `cv/resume.tex` (top-level layout) and every file in `cv/sections/` (`experience.tex`, `education.tex`, `projects.tex`, `skills.tex`, and the optional `awards.tex`, `research.tex`, `volunteer.tex`). The master keeps many **commented-out bullet and project variants** — tailoring means choosing which to enable, not inventing new content.
 
-### CV (`cv/main_<company>.tex`)
-- Always in **English**
-- Follow the moderncv/banking format from `05-cv-templates.md`
-- Tailor the profile statement and experience bullets to the specific role
-- Reframe skills and achievements to match job requirements
-- Keep to 2 pages
+### CV — tailor a per-company copy of the resume.cls master (always English)
 
-### Cover Letter (`cover_letters/cover_<company>_<role>.tex`)
-- **Match the language of the job posting** (Danish posting -> Danish cover letter, English posting -> English cover letter)
-- Follow the structure from `06-cover-letter-templates.md`
-- Use the `cover.cls` template
-- Tailor the opening paragraph to the specific role and company
-- Address to a named person if available in the posting, otherwise "Dear Hiring Manager" (or equivalent in posting language)
-- Keep to approximately one page
-- Any mention of agentic coding or AI tooling must reference **Claude Code** by name
+Create an isolated build directory so the master is never clobbered:
 
-Write both files to disk. Keep the exact text of both drafts in working memory — you will pass them inline to the reviewer in Step 3 and revise them in Step 4 without re-reading.
+```
+cv/applications/<Company>/
+  ├── resume.cls        (copy of cv/resume.cls)
+  ├── resume.tex        (copy of cv/resume.tex)
+  └── sections/*.tex    (copies of cv/sections/*, then tailored)
+```
+
+Tailoring rules (single page, pdflatex):
+- **Select, don't fabricate.** Turn commented bullet/project variants on or off to match the posting's keywords and stack. Reorder projects so the most relevant appear first. Never add a skill, project, or metric David doesn't already have somewhere in the master.
+- Adjust `sections/skills.tex` ordering to lead with the stack the posting names.
+- Keep the header (name/contact) identical to the master.
+- Target **exactly one page** — this is a resume, not a 2-page CV.
+- Any mention of agentic coding or AI tooling must reference **Claude Code** by name.
+
+### Cover Letter — only when the posting asks for one (default: skip)
+
+David sends resumes only. Generate a cover letter **only if** the posting requires or explicitly invites one, or the user asks. When you do:
+- Write it in **English**, use the `cover.cls` template (read `06-cover-letter-templates.md` for structure), output to `cover_letters/cover_<company>_<role>.tex`.
+- Tailor the opening to the role/company; address a named person if the posting has one, else "Dear Hiring Manager."
+- Keep to ~one page; reference **Claude Code** by name for any AI-tooling mention.
+
+If you skip the cover letter, note that in the final summary and ignore all cover-letter substeps below.
+
+Write the file(s) to disk. Keep the exact text of the drafts in working memory — you will pass them inline to the reviewer in Step 3 and revise them in Step 4 without re-reading.
 
 ---
 
@@ -113,10 +124,11 @@ Do NOT read `05-cv-templates.md` or `06-cover-letter-templates.md` — those gov
 ### 3. Drafts to Review
 Both drafts are provided inline below. Do NOT use the Read tool on the draft files — use these exact texts.
 
-<CV_DRAFT file="cv/main_<COMPANY>.tex">
+<CV_DRAFT file="cv/applications/<COMPANY>/sections/*.tex (tailored resume.cls sections)">
 <INSERT_CV_DRAFT_HERE>
 </CV_DRAFT>
 
+<!-- Include this block ONLY if a cover letter was generated; otherwise omit it and tell the reviewer to critique the CV only. -->
 <COVER_LETTER_DRAFT file="cover_letters/cover_<COMPANY>_<ROLE>.tex">
 <INSERT_COVER_LETTER_DRAFT_HERE>
 </COVER_LETTER_DRAFT>
@@ -134,7 +146,7 @@ Return your feedback in **two parts**:
 A JSON array of concrete edits the drafter can apply directly without re-reading the files. Each edit is an object:
 ```json
 {
-  "file": "cv/main_<COMPANY>.tex" | "cover_letters/cover_<COMPANY>_<ROLE>.tex",
+  "file": "cv/applications/<COMPANY>/sections/<section>.tex" | "cover_letters/cover_<COMPANY>_<ROLE>.tex",
   "old_string": "<exact text currently in the draft>",
   "new_string": "<replacement text>",
   "reason": "<one-line rationale: keyword match / company angle / reframing / style>"
@@ -182,37 +194,39 @@ After all edits are applied, the two files on disk are the final drafts.
 ### 5a. Compile
 
 ```bash
-cd cv && lualatex -interaction=nonstopmode main_<company>.tex
-cd ../cover_letters && xelatex -interaction=nonstopmode cover_<company>_<role>.tex
+cd cv/applications/<Company> && pdflatex -interaction=nonstopmode resume.tex
+# Only if a cover letter was generated:
+cd ../../../cover_letters && xelatex -interaction=nonstopmode cover_<company>_<role>.tex
 ```
 
-- CV uses **lualatex** — pdflatex fails on modern MiKTeX with fontawesome5 font-expansion errors. lualatex handles the same sources cleanly.
-- Cover letter uses **xelatex** — cover.cls requires fontspec.
+- Resume uses **pdflatex** — `resume.cls` is an `article`-based class (sourcesanspro/marvosym/ulem), no fontspec or fontawesome, so pdflatex is correct and fast.
+- Cover letter (only if generated) uses **xelatex** — `cover.cls` requires fontspec.
 
-If either compile fails, fix the error and re-compile until clean.
+When the resume compiles clean, copy the PDF to David's naming convention: `David_Ortiz-Resume-<Company>.pdf`.
+
+If a compile fails, fix the error and re-compile until clean.
 
 ### 5b. Inspect layout
 
-Read both PDFs via the Read tool and verify:
+Read the PDF(s) via the Read tool and verify:
 
-**CV (`cv/main_<company>.pdf`):**
-- [ ] Exactly 2 pages (not 1, not 3)
-- [ ] No orphaned `\cventry` titles — a job/education title line must never sit alone at the bottom of page 1 with its bullets on page 2. This is the most common failure.
-- [ ] Section headings are not isolated at the top of page 2 with only 1-2 lines below
-- [ ] No awkward whitespace gaps
+**Resume (`cv/applications/<Company>/resume.pdf`):**
+- [ ] **Exactly 1 page** — if it spills to page 2, trim by disabling lower-relevance project/bullet variants until it fits.
+- [ ] No orphaned headings — a role/project title must not sit alone at the bottom with its bullets pushed below.
+- [ ] No awkward whitespace gaps; the negative `\vspace` values still look balanced.
 
-**Cover letter (`cover_letters/cover_<company>_<role>.pdf`):**
+**Cover letter (`cover_letters/cover_<company>_<role>.pdf`) — only if generated:**
 - [ ] Exactly 1 page
 - [ ] Signature block visible, not cut off or pushed to a second page
 - [ ] Bullet list font matches surrounding body text (both should be Raleway-Medium)
 
 ### 5c. Iterate until clean
 
-If the layout has problems, edit the `.tex` files and recompile. Common fixes (see `05-cv-templates.md` and `06-cover-letter-templates.md` for full details):
+If the layout has problems, edit the section `.tex` files and recompile. Common fixes (see `05-cv-templates.md` for full details):
 
-- **Orphaned CV entry title:** `\usepackage{needspace}` in preamble, then `\needspace{5\baselineskip}` immediately before the problematic `\cventry`
-- **CV spills to page 3 with only a trailing section:** `\enlargethispage{2-3\baselineskip}` before a late section
-- **Substantial content on page 3:** cut content using **relevance-weighted cutting** (see `05-cv-templates.md` → "Relevance-weighted cutting"). Score each candidate line by (a) relevance to THIS posting's keywords and responsibilities, (b) uniqueness (is it duplicated elsewhere?), (c) narrative load (does the cover letter depend on it?). Cut the lowest-total-score line first, regardless of section. Do NOT mechanically apply a static section-based priority order — an older-role bullet that hits posting keywords is worth more than a recent-role bullet that does not.
+- **Resume spills to page 2:** disable (comment out) the lowest-relevance project or bullet variant using **relevance-weighted cutting** (see `05-cv-templates.md`). Score each candidate line by (a) relevance to THIS posting's keywords and responsibilities, (b) uniqueness, (c) narrative load. Comment out the lowest-total-score line first, regardless of section. The master already ships alternate/shorter bullet variants — prefer swapping to a shorter variant over deleting a whole entry.
+- **Resume ends thin (well short of a full page):** enable one more relevant project or the longer bullet variant so the page looks complete.
+- **Orphaned title at page bottom:** reorder entries or trim the entry above so the title and its bullets stay together.
 - **Cover letter itemize breaks compile or uses wrong font:** close `\lettercontent{}` before the list, wrap the list in `{\raggedright\fontspec[Path = OpenFonts/fonts/raleway/]{Raleway-Medium}\fontsize{11pt}{13pt}\selectfont \begin{itemize}...\end{itemize}\par}`
 - **Cover letter spills to 2 pages:** trim using the same relevance-weighted logic. First cut: sentences that restate what a bullet already said. Second cut: a bullet that does not hit posting keywords. Last resort: a bullet that does hit posting keywords. Never reduce geometry or line spacing.
 
@@ -240,7 +254,7 @@ Summarize 3-5 key decisions made to tailor the application:
 
 ### Files Created
 List the files written:
-- `cv/main_<company>.tex`
-- `cover_letters/cover_<company>_<role>.tex`
+- `cv/applications/<Company>/` (tailored resume + `David_Ortiz-Resume-<Company>.pdf`)
+- `cover_letters/cover_<company>_<role>.tex` — **only if** a cover letter was generated
 
-Tell the user: "Both files are ready for your review. Open them to check the final output before compiling."
+Tell the user which files are ready for review, and note explicitly whether a cover letter was produced or skipped. Ask them to open the PDF(s) before sending.
