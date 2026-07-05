@@ -134,22 +134,21 @@ def set_status(args):
 def render(args):
     data = load(); seen = data["seen"]
     buckets = {s: [] for s in STATUS_ORDER}
+    unknown = {}  # surface unrecognized statuses instead of hiding them in "seen"
     for k, v in seen.items():
         s = v.get("status", "seen")
-        if s not in buckets:
-            s = "seen"
-        buckets[s].append(v)
+        if s in buckets:
+            buckets[s].append(v)
+        else:
+            unknown.setdefault(s, []).append(v)
     lines = [f"# Job Roles — status overview ({TODAY})", ""]
     total = len(seen)
     counts = " · ".join(f"{STATUS_LABEL[s].split(' ',1)[1] if ' ' in STATUS_LABEL[s] else s}: {len(buckets[s])}"
                         for s in STATUS_ORDER if buckets[s])
     lines += [f"**{total} roles tracked.** {counts}", "",
               "_Canonical data lives in `job_scraper/seen_jobs.json` (Claude's dedup memory); this file is a generated human view._", ""]
-    for s in STATUS_ORDER:
-        rows = buckets[s]
-        if not rows:
-            continue
-        lines += [f"## {STATUS_LABEL[s]} ({len(rows)})", ""]
+    def emit(header, rows):
+        lines.append(f"## {header} ({len(rows)})"); lines.append("")
         for v in sorted(rows, key=lambda x: (norm(x.get("company")), norm(x.get("title")))):
             comp = v.get("company") or "?"
             title = v.get("title") or "?"
@@ -160,6 +159,13 @@ def render(args):
             locpart = f" · {loc}" if loc else ""
             lines.append(f"- **{title}** — {comp}{locpart}{link}{reason}")
         lines.append("")
+
+    for s in STATUS_ORDER:
+        if buckets[s]:
+            emit(STATUS_LABEL[s], buckets[s])
+    for s, rows in sorted(unknown.items()):
+        emit(f"⚠️ Unknown status '{s}'", rows)
+        print(f"WARNING: {len(rows)} role(s) have unrecognized status '{s}'", file=sys.stderr)
     out = args.out or os.path.join(ROOT, "job_scraper", "roles.md")
     with open(out, "w") as f:
         f.write("\n".join(lines))
