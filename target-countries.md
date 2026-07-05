@@ -1,9 +1,14 @@
 # Target Countries & Location Policy
 
 This file gates **which openings to pursue and which to skip** during `/scrape` and `/apply`.
-David is a Mexican citizen finishing a B.S. (grad Jun 2026), open to relocation and
-"as international as possible." The policy below is a **soft guide**: never auto-reject a
-strong-fit role — instead apply the visa/tier note and surface the tradeoff to the user.
+David is a Mexican citizen finishing a B.S. (grad Jun 2026), **willing to relocate anywhere**
+for the right role. He has held a **J-1 visa** before and is **TN-eligible** (fast route for
+US engineering roles). The policy below is a **soft guide**: never auto-reject a strong-fit
+role — instead apply the visa/tier note and surface the tradeoff to the user.
+
+**Actively targeted markets (from user):** US (priority) and Mexico, plus **Canada, UK &
+Ireland, Continental Europe (incl. Nordics), and Australia & New Zealand**. Asia and the
+Middle East are opportunistic only (strong-fit roles).
 
 ## How to use this file
 
@@ -19,26 +24,29 @@ strong-fit role — instead apply the visa/tier note and surface the tradeoff to
 
 | Country | Code | Notes |
 |---------|------|-------|
-| United States | US | **Top priority, all locations.** Needs work authorization — target employers that sponsor (H-1B/O-1) or roles open to STEM OPT / TN. TN visa is available to Mexican citizens for many engineering roles (fast, but employer must be willing). |
+| United States | US | **Top priority, all locations.** Needs work authorization — target employers that sponsor (H-1B/O-1) or roles open to STEM OPT / TN. **TN visa is available to Mexican citizens** for many engineering roles (fast, but employer must be willing); David has prior J-1 experience. |
 | Mexico | MX | Home market, no visa needed. Prioritize **Guadalajara, CDMX, Monterrey, and remote-MX**. |
 
-## Tier 2 — Strong secondary (apply; visa is routine for skilled tech)
+## Tier 2 — Strong secondary, actively targeted (apply; visa is routine for skilled tech)
+
+All user-selected international markets. Apply as readily as Tier 1 when the role fits.
 
 | Country | Code | Notes |
 |---------|------|-------|
 | Canada | CA | Global Talent Stream / Express Entry friendly to CS/robotics. |
 | United Kingdom | UK/GB | Skilled Worker visa; many tech firms are licensed sponsors. London/Cambridge seen in past search. |
+| Ireland | IE/IR | Critical Skills Employment Permit covers software roles. |
+| Australia | AU | Skilled visas; robotics/mining-tech demand. |
+| New Zealand | NZ | Skilled migrant / accredited-employer work visa. |
 | Germany | DE | EU Blue Card; German language (David has some) is a plus. |
 | Netherlands | NL | Highly Skilled Migrant scheme, English-friendly. |
 | Switzerland | CH | David has ETH Zürich ties; strong robotics/embedded market. |
-| Ireland | IE/IR | Critical Skills Employment Permit covers software roles. |
-| Australia | AU | Skilled visas; robotics/mining-tech demand. |
+| Rest of Continental Europe / EEA | — | Spain, Italy, France, Portugal, Sweden, Denmark, Norway, Finland, Austria, Belgium, Poland, Czechia, etc. EU Blue Card or national skilled-worker permits. Treat as actively targeted; annotate "visa-dependent" only when a posting says no sponsorship. |
 
-## Tier 3 — Opportunistic (apply if strong fit; flag visa caveat)
+## Tier 3 — Opportunistic (apply only on strong fit; flag visa caveat)
 
-Rest of EU/EEA (Spain, Italy, France, Portugal, Sweden, Denmark, Austria, Belgium,
-Norway, Finland, Poland, Czechia, etc.), New Zealand, Singapore, UAE, Japan.
-Apply when the role is a strong technical match; annotate "visa-dependent — confirm sponsorship."
+Asia (Singapore, Japan, etc.) and the Middle East (UAE, etc.). Not a focus — apply when the
+role is a strong technical match; annotate "visa-dependent — confirm sponsorship."
 
 ## Tier 4 — Skip by default
 

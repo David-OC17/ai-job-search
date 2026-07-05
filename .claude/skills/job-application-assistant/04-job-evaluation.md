@@ -63,10 +63,13 @@ Does this role advance career goals and contain tasks that energize?
 | 40-59 | Decent job but doesn't build toward career goals |
 | 0-39 | Dead end or backwards step |
 
+**Role families of interest (all rate highly - David is a broad systems generalist):**
+Systems / compilers / runtimes / toolchains · performance & HPC · GPU/ML inference & AI-systems infra · robotics / perception / autonomy · embedded / firmware / edge AI · systems programming · distributed systems · cloud & platform engineering · financial infrastructure / low-latency systems · scientific computing · research engineering. **Industry-agnostic** - open to almost any sector, prioritizing **fast-moving, well-performing, modern** teams doing challenging work.
+
 **Career goals:**
-- Land a strong new-grad SWE / robotics / embedded role at a technically rigorous team (AI hardware, robotics/autonomy, or high-scale systems)
-- Do low-level, performance-critical work: compilers/runtimes/toolchains, HPC, GPU/ML inference, robotics stacks
-- Build toward deep systems + robotics expertise; ideally at a frontier hardware/AI or autonomy company
+- Land a strong new-grad engineering role at a technically rigorous, fast-moving team
+- Do challenging, performance-critical or research-flavored work (low-level systems, robotics, ML infra, or any hard problem in the families above)
+- Build toward deep systems + robotics expertise; frontier AI-hardware, robotics/autonomy, big-tech, and quant/fintech all appeal - as does any team with strong culture and hard problems
 
 **Motivation filter:** Evaluate not just whether David *can* do the tasks, but whether they will *energize* him:
 - Tasks that energize: systems/performance engineering, robotics & perception, embedded/firmware, novel algorithm prototyping, research-flavored work
@@ -74,8 +77,8 @@ Does this role advance career goals and contain tasks that energize?
 - Non-task factors: engineering culture, autonomy, technical caliber of the team, visa sponsorship willingness
 
 **Life situation alignment:**
-- **Security**: new grad seeking first full-time role; visa sponsorship is a real factor for non-MX roles
-- **Flexibility**: available from ~mid-2026 (graduation June 2026); open to relocation
+- **Security**: new grad seeking first full-time role; visa sponsorship is a real factor for non-MX roles. Has acquired J-1 visa before and is eligible for TN visa, which could facilitate US visa.
+- **Flexibility**: available from ~mid-2026 (graduation June 2026); **willing to relocate anywhere** for the right role - on-site international postings score full marks, not a penalty
 - **Professional development**: prioritize teams with strong mentorship and hard technical problems
 
 ### 6. Salary Benchmark (Optional)
