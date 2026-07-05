@@ -16,9 +16,9 @@ How well do the required/preferred skills align with the candidate's capabilitie
 | 40-59 | Partial match, significant upskilling needed |
 | 0-39 | Fundamental mismatch |
 
-**Strong match areas:** [YOUR_PRIMARY_SKILLS]
-**Moderate match areas:** [YOUR_SECONDARY_SKILLS]
-**Weak match areas:** [SKILLS_YOU_LACK]
+**Strong match areas:** C++/C systems programming, robotics & perception (SLAM, sensor fusion, EKF, ROS2), embedded/firmware (STM32, ATtiny, RTOS), FPGA/Verilog, ML inference optimization (TensorRT), HPC/parallel computing
+**Moderate match areas:** Python ML/DL, C# backend/SDKs, computer vision (OpenCV/YOLOv8), SQL, distributed/high-scale systems
+**Weak match areas:** large-scale production frontend/web, cloud-platform ops at scale, roles needing many years of professional (non-intern) experience
 
 ### 2. Experience Match (0-100)
 Does work history align with what they're looking for?
@@ -30,9 +30,9 @@ Does work history align with what they're looking for?
 | 40-59 | Adjacent experience, would need to make the case |
 | 0-39 | Unrelated experience |
 
-**Strong:** [YOUR_DIRECT_EXPERIENCE_DOMAINS]
-**Moderate:** [YOUR_ADJACENT_EXPERIENCE]
-**Entry-level:** [ROLES_WITH_LIMITED_EXPERIENCE]
+**Strong:** systems/backend SWE (Microsoft), embedded firmware (Connectia), ML systems (Meta), robotics research (ETH Zürich) - all as internships/research
+**Moderate:** compilers/runtimes/toolchains, autonomy/perception production roles, GPU/ML infra (strong adjacent projects, no full-time yet)
+**Entry-level:** all full-time roles - David is a new grad (Jun 2026); target new-grad / early-career / university-grad postings, not senior IC roles
 
 ### 3. Behavioral/Culture Fit (0-100)
 Does the role and company culture match the behavioral profile?
@@ -46,11 +46,12 @@ Does the role and company culture match the behavioral profile?
 
 **Red flags to research:** Department disorganization, work dominated by maintenance over development, poor chemistry with leadership, culture mismatches. Check reviews, media coverage, LinkedIn connections, and network contacts for insider perspective.
 
-### 4. Location & Logistics (Pass/Fail + Notes)
-- Within commute range: PASS
-- Remote with occasional office: PASS
-- Requires relocation: FAIL (deal-breaker)
-- Frequent international travel: FLAG (discuss with user)
+### 4. Location & Visa (Pass/Flag/Fail - see `target-countries.md`)
+- Tier 1-2 country (US, MX, CA, UK, DE, NL, CH, IE, AU) or remote-worldwide/Americas-tz: PASS
+- Tier 3 country (rest of EU, NZ, SG, UAE, JP): PASS, flag "visa-dependent - confirm sponsorship"
+- Tier 4 country / no realistic visa path with no relocation support: FAIL
+- Hard requirement David can't meet (US-citizen / active clearance / ITAR): FAIL
+- Note: TN visa is available to Mexican citizens for many US engineering roles - a US role is still a PASS if the employer will sponsor TN/H-1B/O-1 or accepts STEM OPT
 
 ### 5. Career Alignment & Motivation (0-100)
 Does this role advance career goals and contain tasks that energize?
@@ -63,19 +64,19 @@ Does this role advance career goals and contain tasks that energize?
 | 0-39 | Dead end or backwards step |
 
 **Career goals:**
-- [YOUR_CAREER_GOAL_1]
-- [YOUR_CAREER_GOAL_2]
-- [YOUR_CAREER_GOAL_3]
+- Land a strong new-grad SWE / robotics / embedded role at a technically rigorous team (AI hardware, robotics/autonomy, or high-scale systems)
+- Do low-level, performance-critical work: compilers/runtimes/toolchains, HPC, GPU/ML inference, robotics stacks
+- Build toward deep systems + robotics expertise; ideally at a frontier hardware/AI or autonomy company
 
-**Motivation filter:** Evaluate not just whether you *can* do the tasks, but whether the tasks will *energize* you. Consider:
-- Tasks that energize: [YOUR_ENERGIZING_TASKS]
-- Tasks that drain: [YOUR_DRAINING_TASKS]
-- Non-task factors: leadership style, department culture, company values, degree of autonomy
+**Motivation filter:** Evaluate not just whether David *can* do the tasks, but whether they will *energize* him:
+- Tasks that energize: systems/performance engineering, robotics & perception, embedded/firmware, novel algorithm prototyping, research-flavored work
+- Tasks that drain: pure CRUD/web-frontend maintenance, low-autonomy ticket-shuffling
+- Non-task factors: engineering culture, autonomy, technical caliber of the team, visa sponsorship willingness
 
-**Life situation alignment:** Consider personal constraints:
-- **Security**: [YOUR_FINANCIAL_SITUATION_CONTEXT]
-- **Flexibility**: [YOUR_SCHEDULE_CONSTRAINTS]
-- **Professional development**: [YOUR_GROWTH_PRIORITIES]
+**Life situation alignment:**
+- **Security**: new grad seeking first full-time role; visa sponsorship is a real factor for non-MX roles
+- **Flexibility**: available from ~mid-2026 (graduation June 2026); open to relocation
+- **Professional development**: prioritize teams with strong mentorship and hard technical problems
 
 ### 6. Salary Benchmark (Optional)
 
@@ -129,7 +130,7 @@ Present the evaluation as:
 
 ### Company Research Checklist
 - [ ] Checked company website (mission, values, recent news)
-- [ ] Checked review sites (Glassdoor, Jobindex, etc.)
+- [ ] Checked review sites (Glassdoor, Blind, Levels.fyi, etc.)
 - [ ] Checked LinkedIn for team size, recent hires, connections
 - [ ] Checked media for restructuring, growth, or workplace issues
 - [ ] Identified network contacts who may know the team/manager

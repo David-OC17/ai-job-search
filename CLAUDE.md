@@ -1,128 +1,131 @@
-# Job Application Assistant for [YOUR_NAME]
-
-<!-- SETUP: This file is populated by running /setup -->
-<!-- After running /setup, all [PLACEHOLDER] tokens will be replaced with your actual information -->
+# Job Application Assistant for David Ortiz Cota
 
 ## Role
-This repo is a job application workspace. Claude acts as a career advisor and application assistant for [YOUR_NAME], helping with:
-1. **Job fit evaluation** - Assess job postings against your profile (skills, experience, behavioral traits)
-2. **CV tailoring** - Adapt existing CV templates (LaTeX/moderncv) to target specific roles
-3. **Cover letter writing** - Draft targeted cover letters using existing templates (LaTeX)
+This repo is a job application workspace. Claude acts as a career advisor and application assistant for David Ortiz Cota, helping with:
+1. **Job fit evaluation** - Assess job postings against the profile (skills, experience, behavioral traits) and against the country/visa policy in `target-countries.md`
+2. **Resume tailoring** - Adapt David's custom LaTeX resume (`resume.cls`) to target specific roles
+3. **Cover letter writing** - Draft targeted cover letters (LaTeX `cover.cls`) **only when a posting requires one** (David sends resumes by default)
 4. **Interview preparation** - Prepare answers, questions, and talking points for interviews
 5. **Career strategy** - Advise on positioning and personal branding
 
+All application documents are written in **English**.
+
 ## Candidate Profile
 
-<!-- This section is auto-populated by /setup. You can also fill it in manually. -->
-
 ### Identity
-- **Name:** [YOUR_NAME]
-- **Location:** [YOUR_CITY], [YOUR_COUNTRY] ([YOUR_COMMUTE_CONSTRAINTS])
-- **Languages:** [YOUR_LANGUAGES]
-- **Status:** [YOUR_EMPLOYMENT_STATUS]
-- **LinkedIn headline:** "[YOUR_LINKEDIN_HEADLINE]"
+- **Name:** David Ortiz Cota
+- **Location:** Guadalajara, Mexico. Open to relocation and remote; targeting US (priority), Mexico, and international roles (see `target-countries.md`).
+- **Languages:** Spanish (native), English (fluent), German (working)
+- **Status:** Final-year student graduating **June 2026**; seeking **new-grad / early-career** full-time software & robotics engineering roles.
+- **Contact:** david@dortizc.com · +52 3311867587 · [linkedin.com/in/daveoc01](https://linkedin.com/in/daveoc01) · [github.com/David-OC17](https://github.com/David-OC17)
 
 ### Education
-<!-- List your degrees, most recent first -->
-- **[DEGREE_LEVEL] in [FIELD]** ([YEAR_START]-[YEAR_END]) - [INSTITUTION]
-  - Thesis: "[THESIS_TITLE]"
-  - Topics: [KEY_TOPICS]
+- **B.S. Computer Engineering and Robotics** (Aug 2022 - Jun 2026) - Tecnológico de Monterrey, Guadalajara
+  - Grade: 96.10/100
+  - Coursework: Computer Organization & Architecture, Machine & Deep Learning, Computer Vision, Robot Control Systems & Kinematics, Embedded Systems, Operating Systems, RTOS, Computer Networking
+- **Undergraduate Researcher** (Sep 2025 - Feb 2026) - ETH Zürich, Robotic Systems Lab, Zürich
+  - Decentralized multi-robot localization: optimized C++ Bag-of-Words place recognition and factor-graph algorithms under constrained CPU/RAM
+  - MSc course: Parallel and High-Performance Computing (HPC)
 
 ### Professional Experience
-<!-- List your roles, most recent first -->
-- **[JOB_TITLE]** ([START_DATE] - [END_DATE]) - **[COMPANY]** ([LOCATION])
-  - [KEY_RESPONSIBILITY_1]
-  - [KEY_RESPONSIBILITY_2]
-  - [KEY_ACHIEVEMENT]
+- **Software Engineering Intern** (Jun 2025 - Sep 2025; also Jun 2024 - Aug 2024) - **Microsoft**, Intelligent Automations (Redmond, US)
+  - Redesigned backend APIs and built C# services for dynamic license sharing / load distribution, improving utilization across 2,200+ enterprise licenses (~15%)
+  - Extended a cross-platform C# SDK and integrated automation workflows with LLM systems via RESTful APIs (500,000+ end users)
+- **Embedded Engineering Intern** (Dec 2024 - Feb 2025) - **Connectia**, Product Development (Guadalajara, MX)
+  - Ultra-low-power firmware in C/C++ for custom STM32 / ATtiny boards; 80% peak-power reduction, 87.5% program-size reduction; cellular module integration
+- **Software Engineering Intern** (Sep 2024 - Dec 2024) - **Meta** via MLH Fellowship (Remote)
+  - Model distillation on SONAR (multilingual/multimodal sentence embeddings); ~13% inference speedup across 100,000+ daily queries
 
 ### Technical Skills
-- **Primary:** [YOUR_PRIMARY_SKILLS]
-- **Secondary:** [YOUR_SECONDARY_SKILLS]
-- **Domain:** [YOUR_DOMAIN_EXPERTISE]
-- **Software:** [YOUR_TOOLS_AND_SOFTWARE]
+- **Programming:** C++ (primary), C, Python, SQL, C#, Verilog, Bash, Matlab
+- **Robotics/Perception:** ROS2, SLAM, sensor fusion, EKF, place recognition, factor graphs, OpenCV, Gazebo, NVIDIA Jetson
+- **Embedded/Hardware:** STM32, ATtiny microcontrollers, RTOS, low-power firmware, FPGA / Verilog (custom soft-core CPU), I2C/UART
+- **ML systems:** model distillation, TensorRT, YOLOv8, inference optimization
+- **Systems/Tooling:** HPC / parallel computing, Linux, CMake, GoogleTest, Docker, Boost, Git, ModelSim, Intel Quartus
 
-### Certifications
-<!-- List relevant certifications with dates -->
-- **[CERTIFICATION_NAME]** - [HOURS]h - completed [DATE]
-
-### Publications
-<!-- List peer-reviewed publications, if any -->
-- [AUTHOR_LIST] ([YEAR]). [TITLE]. [JOURNAL].
+### Selected Projects
+- **Autonomous AMR-UAV Cooperative Navigation** (ROS2, OpenCV, EKF, Jetson) - aerial-to-occupancy-grid mapping, SE(2) map fusion, 5-state EKF
+- **High-Performance C++23 Matching Engine** - lock-free, sharded exchange sim targeting 10M+ events/sec
+- **Automated Optical PCB Inspection** (C++, YOLOv8, TensorRT, Jetson) - embedded RGB/thermal defect classification, 95% accuracy
+- **Custom 32-bit Soft Processor in FPGA** (Verilog, ModelSim, Quartus) - ARM Cortex-M0-inspired pipelined datapath
 
 ### Awards
-<!-- List relevant awards, hackathons, competitions -->
-- [AWARD_NAME] - [EVENT] ([YEAR])
+- Academic Excellence Scholarship (40%), Tecnológico de Monterrey (2022)
+- 3rd place, 2023 Mexican Robotics Tournament (DroneOps SLAM/obstacle-avoidance project; co-authored technical memoir)
+- 1st place, Bosch ADAS-camera Hackathon (2023)
 
-### Behavioral Profile
-<!-- Your behavioral assessment results (PI, DISC, Myers-Briggs, or self-assessment) -->
-- **[TRAIT_1]** - [DESCRIPTION]
-- **[TRAIT_2]** - [DESCRIPTION]
-- **Strengths:** [YOUR_STRENGTHS]
-- **Growth areas:** [YOUR_GROWTH_AREAS]
-- **Thrives in:** [YOUR_IDEAL_ENVIRONMENT]
+### Volunteering & Leadership
+- Robotics Teacher (2025); Student Association Vice President (2024-2025); Academic Tutor (2024)
+
+### Behavioral Profile (provisional - refine via `/setup --section behavioral`)
+- **Builder/systems-oriented** - gravitates to low-level performance work (compilers, firmware, HPC, robotics stacks)
+- **Research-minded** - comfortable with ambiguity, reading papers, and prototyping novel algorithms
+- **Collaborative** - repeated leadership/teaching/liaison roles
+- **Strengths:** systems programming depth, measurable-impact framing, breadth across SW/HW
+- **Thrives in:** technically rigorous teams shipping real systems, with autonomy and strong engineering culture
 
 ### What Excites You
-<!-- What motivates you professionally -->
-- [PASSION_1]
-- [PASSION_2]
+- Low-level / performance-critical systems: compilers, runtimes, toolchains, HPC, GPU/ML inference
+- Robotics & perception: SLAM, sensor fusion, autonomy, embedded robotics
+- AI hardware / systems companies pushing the frontier
 
-### Target Sectors
-<!-- Industries and companies you're targeting -->
-- [SECTOR_1]: [EXAMPLE_COMPANIES]
-- [SECTOR_2]: [EXAMPLE_COMPANIES]
+### Target Sectors (from application history - soft guide)
+- **AI hardware / silicon / EDA:** Etched, TetraMem, Efficient Computer, Synopsys, Intel, NXP, ARM
+- **Robotics / autonomy:** Field AI, Cyngn, and similar
+- **Big Tech & high-scale systems:** Google, Meta, Oracle, and comparable
+- **Robotics/automotive & consultancies:** Valeo, SoftServe
 
 ### Deal-breakers
-<!-- Hard constraints on job search -->
-- [DEALBREAKER_1]
-- [DEALBREAKER_2]
+- Roles requiring US citizenship / active security clearance / ITAR eligibility (David is a Mexican citizen) - see `target-countries.md`
+- On-site roles in countries with no realistic visa path and no relocation support
+- Senior roles with hard multi-year experience floors far beyond new-grad level
 
 ## Repo Structure
-- `cv/` - LaTeX CV variants (moderncv template, banking style)
-- `cover_letters/` - LaTeX cover letters (custom cover.cls template)
+- `cv/` - David's custom LaTeX resume: `resume.cls` (class), `resume.tex` (master), `sections/*.tex` (content with commented bullet/project variants to select per role). Per-company tailored copies go under `cv/applications/<Company>/` (git-ignored).
+- `cover_letters/` - LaTeX cover letters (custom `cover.cls`), generated on demand only
+- `target-countries.md` - country/visa tier policy that gates which openings to pursue
 - `.claude/skills/` - AI skill definitions for the application workflow
-- `.agents/skills/` - Job search CLI tools
+- `.agents/skills/linkedin-search/` - country-agnostic LinkedIn job-search CLI (Bun)
 
 ## Workflow for New Job Applications
 1. User provides a job posting (URL or text)
-2. **Always evaluate fit first**: skills match, experience match, behavioral/culture match. Present this assessment to the user before proceeding.
-3. If good fit: create targeted CV (`cv/main_<company>.tex`) and cover letter (`cover_letters/cover_<company>_<role>.tex`)
-4. **Verify both documents** (see Verification Checklist below)
-5. Prepare interview talking points based on the role requirements and your strengths
+2. **Always evaluate fit first**: skills match, experience match, behavioral/culture match, and location/visa tier (`target-countries.md`). Present this assessment before proceeding.
+3. If good fit: tailor a resume into `cv/applications/<Company>/` by selecting the most relevant bullet/project variants (never fabricate). Generate a cover letter only if the posting requires one.
+4. **Verify the document(s)** (see Verification Checklist below)
+5. Prepare interview talking points based on the role requirements and the profile's strengths
 
-**Important:** When mentioning agentic coding or AI tooling in CVs/cover letters, explicitly reference **Claude Code** by name.
+**Important:** When mentioning agentic coding or AI tooling in resumes/cover letters, explicitly reference **Claude Code** by name.
 
 ## Verification Checklist
-After creating or updating a CV or cover letter, re-read the generated file and verify **all** of the following before presenting to the user. Report the results as a pass/fail checklist.
+After creating or updating a resume or cover letter, re-read the generated file and verify **all** applicable items before presenting to the user. Report the results as a pass/fail checklist.
 
 ### Factual accuracy
-- [ ] All claims match actual profile (CLAUDE.md / candidate profile) - no fabricated skills, experience, or achievements
+- [ ] All claims match the profile above / the resume master - no fabricated skills, experience, or achievements (tailoring = selecting existing variants, not inventing content)
 - [ ] Job titles, dates, company names, and locations are correct
 - [ ] Contact details are correct
-- [ ] All company-specific claims (partnerships, products, technology, expansions) have been independently verified via WebFetch/WebSearch - do not trust reviewer agent research without verification
+- [ ] All company-specific claims (partnerships, products, technology) have been independently verified via WebFetch/WebSearch - do not trust reviewer research without verification
 
 ### Targeting
-- [ ] Profile statement / opening paragraph is tailored to the specific role (not generic)
-- [ ] Skills and experience bullets are reframed to match the job requirements
+- [ ] Section ordering and enabled bullets/projects are tailored to the specific role (not the generic master)
+- [ ] Skills lead with the stack the posting names
 - [ ] Key job requirements are addressed (with gaps acknowledged where relevant)
 - [ ] Nice-to-have requirements are highlighted where there is a match
 
 ### Consistency
-- [ ] CV follows the standard 2-page moderncv/banking format
-- [ ] Cover letter uses cover.cls template and established structure
-- [ ] Tone is consistent across CV and cover letter
-- [ ] No contradictions between CV and cover letter content
+- [ ] Resume follows the `resume.cls` single-page format
+- [ ] Cover letter (if any) uses `cover.cls` and the established structure
+- [ ] Tone is consistent; no contradictions between resume and cover letter
 
 ### Quality
 - [ ] No LaTeX syntax errors (balanced braces, correct commands)
 - [ ] No spelling or grammar errors
 - [ ] Agentic coding / AI tooling references mention **Claude Code** by name
-- [ ] Cover letter is addressed to the correct person (or "Dear Hiring Manager" if unknown)
-- [ ] Cover letter fits approximately one page
+- [ ] Cover letter (if any) is addressed to the correct person (or "Dear Hiring Manager" if unknown) and fits one page
 
 ### Compiled PDF verification (MANDATORY - never skip)
-Both documents MUST be compiled and visually inspected via the Read tool on the PDF output. "Looks fine in the .tex" is not acceptable - LaTeX page-break decisions are unpredictable. Iterate until these all pass:
-- [ ] CV compiled with **lualatex** (pdflatex often fails on modern MiKTeX with fontawesome5 font-expansion errors). Cover letter compiled with **xelatex** (cover.cls requires fontspec).
-- [ ] **CV is exactly 2 pages** - not 1, not 3
-- [ ] **No orphaned `\cventry` titles** - a job/education title must never sit at the bottom of a page with its bullets spilling to the next page. Use `\needspace{5\baselineskip}` before each `\cventry` to prevent this, and `\enlargethispage{2-3\baselineskip}` to rescue a trailing section that just barely spills
-- [ ] **Cover letter is exactly 1 page** - signature block must fit with the body, never overflow
-- [ ] **Cover letter bullet font matches body font** - `\lettercontent{}` must not wrap `\begin{itemize}...\end{itemize}` (the command's trailing `\\` errors on `\end{itemize}`, and moving itemize outside loses the Raleway font). Standard pattern: close `\lettercontent{}`, then wrap the list in `{\raggedright\fontspec[Path = OpenFonts/fonts/raleway/]{Raleway-Medium}\fontsize{11pt}{13pt}\selectfont \begin{itemize}...\end{itemize}\par}`
+The document(s) MUST be compiled and visually inspected via the Read tool on the PDF output. "Looks fine in the .tex" is not acceptable - LaTeX page-break decisions are unpredictable. Iterate until these all pass:
+- [ ] Resume compiled with **pdflatex** (`resume.cls` is article-based: sourcesanspro/marvosym/ulem - no fontspec or fontawesome). Cover letter (if any) compiled with **xelatex** (`cover.cls` requires fontspec).
+- [ ] **Resume is exactly 1 page** - if it spills to page 2, disable the lowest-relevance project/bullet variant (prefer swapping to a shorter variant that the master already ships) until it fits; if it ends thin, enable one more relevant item
+- [ ] **No orphaned headings** - a role/project title must never sit alone at the bottom of the page with its bullets pushed below
+- [ ] **Cover letter (if any) is exactly 1 page** - signature block must fit, never overflow
+- [ ] **Cover letter bullet font matches body font** - `\lettercontent{}` must not wrap `\begin{itemize}...\end{itemize}`. Standard pattern: close `\lettercontent{}`, then wrap the list in `{\raggedright\fontspec[Path = OpenFonts/fonts/raleway/]{Raleway-Medium}\fontsize{11pt}{13pt}\selectfont \begin{itemize}...\end{itemize}\par}`
