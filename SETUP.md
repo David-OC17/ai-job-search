@@ -16,21 +16,25 @@ You'll need an Anthropic API key or a Claude Pro/Team subscription. See the [Cla
 
 ### Python
 
-Python 3.10+ is required for the salary lookup tool. Check with:
+Python 3.11 is used only by the optional salary lookup tool. A dedicated `mamba`/`conda`
+environment is recommended so it stays isolated:
 
 ```bash
-python --version
+mamba create -n jobsearch python=3.11
+mamba activate jobsearch
 ```
 
-### Bun (for job search tools)
+Check with `python --version` (should report 3.11.x inside the env).
 
-The job portal CLIs (four Danish portals plus the country-agnostic LinkedIn tool) are written in TypeScript and run with Bun:
+### Bun (for the job search tool)
+
+The `linkedin-search` CLI is written in TypeScript and runs with Bun:
 
 ```bash
 curl -fsSL https://bun.sh/install | bash
 ```
 
-### LaTeX (for compiling CVs and cover letters)
+### LaTeX (for compiling the resume and cover letters)
 
 Install a LaTeX distribution to compile the generated `.tex` files to PDF:
 
@@ -38,7 +42,9 @@ Install a LaTeX distribution to compile the generated `.tex` files to PDF:
 - **macOS:** [MacTeX](https://tug.org/mactex/)
 - **Linux:** `sudo apt install texlive-full` or `sudo dnf install texlive-scheme-full`
 
-The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors). The cover letter compiles with `xelatex` because `cover.cls` requires `fontspec` for its custom Lato/Raleway fonts.
+The resume (`cv/resume.cls`) compiles with `pdflatex` — it is an article-based class
+(sourcesanspro/marvosym/ulem), no fontspec or fontawesome. The optional cover letter
+compiles with `xelatex` because `cover.cls` requires `fontspec` for its custom Lato/Raleway fonts.
 
 ## 2. Fork and clone
 
@@ -52,12 +58,10 @@ Or manually: fork on GitHub, then clone your fork.
 ## 3. Install job search CLI dependencies
 
 ```bash
-for tool in jobbank-search jobdanmark-search jobindex-search jobnet-search linkedin-search; do
-  cd .agents/skills/$tool/cli && bun install && cd ../../../..
-done
+cd .agents/skills/linkedin-search/cli && bun install && cd ../../../..
 ```
 
-For `linkedin-search` the install is optional: it has zero runtime dependencies and runs with plain `bun`; `bun install` only pulls TypeScript dev types.
+This is optional: `linkedin-search` has zero runtime dependencies and runs with plain `bun`; `bun install` only pulls TypeScript dev types.
 
 ## 4. Run the setup interview
 
@@ -90,7 +94,7 @@ Both paths produce the same result: fully populated profile files.
 | `04-job-evaluation.md` | Personalized skill match areas and career goals |
 | `05-cv-templates.md` | Profile statement templates for your background |
 | `07-interview-prep.md` | STAR examples from your experience |
-| `cv/main_example.tex` | Your LaTeX CV with actual details |
+| `cv/resume.tex` + `cv/sections/` | Your LaTeX resume (already provided; tailored per role) |
 | `search-queries.md` | Job search queries for `/scrape` |
 
 ### Re-running setup
@@ -123,7 +127,7 @@ This creates `salary_data.json` which the `/apply` workflow uses for salary benc
 Find a job posting you're interested in, then:
 
 ```
-/apply https://jobindex.dk/job/1234567
+/apply https://job-boards.greenhouse.io/company/jobs/1234567
 ```
 
 Or paste the job description directly:
@@ -133,21 +137,21 @@ Or paste the job description directly:
 ```
 
 Claude will:
-1. Evaluate the fit against your profile
+1. Evaluate the fit against your profile (and check the location against `target-countries.md`)
 2. Ask if you want to proceed
-3. Draft a tailored CV and cover letter
+3. Draft a tailored single-page resume (and a cover letter only if the posting requires one)
 4. Have a reviewer agent critique the drafts
 5. Revise and present the final output
 
 ## 7. Compile your documents
 
-After `/apply` creates the LaTeX files:
+`/apply` builds a tailored resume under `cv/applications/<Company>/`. To compile manually:
 
 ```bash
-# Compile CV
-cd cv && lualatex main_<company>.tex && cd ..
+# Compile the resume
+cd cv/applications/<Company> && pdflatex resume.tex && cd ../../..
 
-# Compile cover letter
+# Compile a cover letter (only if one was generated)
 cd cover_letters && xelatex cover_<company>_<role>.tex && cd ..
 ```
 
@@ -156,13 +160,12 @@ cd cover_letters && xelatex cover_<company>_<role>.tex && cd ..
 ### "salary_data.json not found"
 This is expected if you haven't set up salary benchmarking. The `/apply` workflow skips this step automatically.
 
-### Job search CLI tools not working
-Make sure Bun is installed and you ran `bun install` in each CLI directory. The tools require network access to fetch job listings.
+### Job search CLI tool not working
+Make sure Bun is installed and you ran `bun install` in `.agents/skills/linkedin-search/cli`. The tool requires network access to fetch job listings, and LinkedIn may rate-limit — keep volume low.
 
 ### LaTeX compilation errors
-- CV: uses `lualatex` (pdflatex often fails on modern MiKTeX with `fontawesome5` font-expansion errors; lualatex handles the same sources cleanly)
+- Resume: uses `pdflatex` (`resume.cls` is article-based: sourcesanspro/marvosym/ulem — no fontspec or fontawesome)
 - Cover letter: uses `xelatex` (for custom fonts in `OpenFonts/fonts/`)
-- Make sure your LaTeX distribution includes the `moderncv` package
 
 ### Fonts not found in cover letter
 The cover letter template expects fonts in `cover_letters/OpenFonts/fonts/`. Make sure this directory exists and contains the Lato and Raleway font files.

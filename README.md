@@ -8,7 +8,7 @@ An AI-powered job application framework built on [Claude Code](https://claude.co
 
 ## What this is
 
-A structured workflow that turns Claude Code into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**. The job portal search skills are built for the Danish market (Jobindex, Jobnet, Akademikernes Jobbank, etc.), but the pattern is designed to be swapped for your local job boards.
+A structured workflow that turns Claude Code into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**. This fork is adapted for the **US, Mexico, and international** job markets: it searches via the country-agnostic LinkedIn CLI plus WebSearch across Indeed, OCC, Computrabajo, Glassdoor, and company ATS boards, and gates results with a country/visa policy (`target-countries.md`).
 
 ```
 /setup          /scrape              /apply <url>
@@ -31,9 +31,9 @@ The framework encodes career guidance best practices, including structured evalu
 ## Prerequisites
 
 - [Claude Code](https://claude.com/claude-code) (CLI)
-- Python 3.10+
-- [Bun](https://bun.sh) (for Danish job search CLI tools)
-- LaTeX distribution with `lualatex` and `xelatex`: [TeX Live](https://tug.org/texlive/) or [MiKTeX](https://miktex.org/). The CV compiles with `lualatex` (pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors); the cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`.
+- Python 3.11 (only for the optional salary tool) — a `mamba`/`conda` env is recommended
+- [Bun](https://bun.sh) (for the LinkedIn job-search CLI)
+- LaTeX distribution with `pdflatex` and `xelatex`: [TeX Live](https://tug.org/texlive/) or [MiKTeX](https://miktex.org/). The resume (`cv/resume.cls`) compiles with `pdflatex`; the optional cover letter compiles with `xelatex` because `cover.cls` requires `fontspec`.
 
 ## Quick start
 
@@ -44,17 +44,13 @@ gh repo fork MadsLorentzen/ai-job-search --clone
 cd ai-job-search
 ```
 
-### 2. Install job search tools
+### 2. Install the job search tool
 
 ```bash
-cd .agents/skills/jobbank-search/cli && bun install && cd ../../../..
-cd .agents/skills/jobdanmark-search/cli && bun install && cd ../../../..
-cd .agents/skills/jobindex-search/cli && bun install && cd ../../../..
-cd .agents/skills/jobnet-search/cli && bun install && cd ../../../..
 cd .agents/skills/linkedin-search/cli && bun install && cd ../../../..
 ```
 
-For `linkedin-search` the install is optional: it has zero runtime dependencies and runs with plain `bun`; `bun install` only pulls TypeScript dev types.
+The install is optional: `linkedin-search` has zero runtime dependencies and runs with plain `bun`; `bun install` only pulls TypeScript dev types.
 
 ### 3. Set up your profile
 
@@ -77,7 +73,7 @@ This searches multiple job portals for positions matching your profile, deduplic
 ### 5. Apply to a job
 
 ```bash
-/apply https://jobindex.dk/job/1234567
+/apply https://job-boards.greenhouse.io/company/jobs/1234567
 ```
 
 If the URL can't be fetched (some job portals block automated access), you can paste the job description directly instead:
@@ -115,22 +111,21 @@ ai-job-search/
 │   │   │   ├── 02-behavioral-profile.md# PI/DISC/personality assessment
 │   │   │   ├── 03-writing-style.md    # Tone, structure, do's and don'ts
 │   │   │   ├── 04-job-evaluation.md   # Scoring framework for job fit
-│   │   │   ├── 05-cv-templates.md     # LaTeX CV structure + tailoring rules
-│   │   │   ├── 06-cover-letter-templates.md # LaTeX cover letter templates
+│   │   │   ├── 05-cv-templates.md     # resume.cls structure + tailoring rules
+│   │   │   ├── 06-cover-letter-templates.md # LaTeX cover letter templates (on demand)
 │   │   │   └── 07-interview-prep.md   # STAR examples + interview framework
 │   │   ├── job-scraper/               # Job search orchestration
 │   │   └── upskill/                   # /upskill skill gap analysis and learning plan
 │   └── settings.json                  # Claude Code permissions (shared, scoped)
+├── target-countries.md                # Country/visa tier policy gating which openings to pursue
 ├── .agents/skills/                    # Job portal CLI tools
-│   ├── jobbank-search/                # Akademikernes Jobbank (Denmark)
-│   ├── jobdanmark-search/             # Jobdanmark.dk (Denmark)
-│   ├── jobindex-search/               # Jobindex.dk (Denmark)
-│   ├── jobnet-search/                 # Jobnet.dk (Denmark, government portal)
 │   └── linkedin-search/               # LinkedIn public job listings (country-agnostic)
 ├── cv/
-│   └── main_example.tex               # moderncv LaTeX template
+│   ├── resume.cls                     # Custom single-page resume LaTeX class
+│   ├── resume.tex                     # Resume master (header + \input sections)
+│   └── sections/                      # Resume content (bullet/project variants to select)
 ├── cover_letters/
-│   ├── cover.cls                      # Custom cover letter LaTeX class
+│   ├── cover.cls                      # Custom cover letter LaTeX class (used on demand)
 │   └── OpenFonts/                     # Lato + Raleway fonts
 ├── documents/                         # Career source materials for /setup Path A and /expand
 │   ├── README.md                      # Folder layout instructions
@@ -153,15 +148,15 @@ ai-job-search/
 
 The `/apply` command runs a **drafter-reviewer workflow** with mandatory PDF compilation:
 
-1. **Parse** the job posting (URL or text)
-2. **Evaluate fit** against your profile (skills, experience, culture, location, career alignment)
-3. **Draft** a tailored CV and cover letter in LaTeX
+1. **Parse** the job posting (URL or text) and screen the location against `target-countries.md`
+2. **Evaluate fit** against your profile (skills, experience, culture, location/visa, career alignment)
+3. **Draft** a tailored single-page resume (and a cover letter only if the posting requires one) in LaTeX, in English
 4. **Spawn a reviewer agent** that researches the company and critiques the drafts
 5. **Revise** based on the reviewer's feedback
-6. **Compile and inspect** both PDFs: lualatex for the CV, xelatex for the cover letter. Claude reads the rendered pages and iterates on the LaTeX until the CV is exactly 2 pages with no orphaned entry titles, and the cover letter is exactly 1 page with the signature visible and fonts consistent.
+6. **Compile and inspect** the PDF(s): pdflatex for the resume, xelatex for a cover letter. Claude reads the rendered pages and iterates on the LaTeX until the resume is exactly 1 page with no orphaned entry titles (and any cover letter is exactly 1 page with the signature visible and fonts consistent).
 7. **Present** the final output with a verification checklist
 
-All claims in the CV and cover letter are verified against your actual profile. The system never fabricates skills or experience.
+All claims in the resume and cover letter are verified against your actual profile. Tailoring means selecting from existing content variants — the system never fabricates skills or experience.
 
 ### What makes this workflow different
 
@@ -198,11 +193,11 @@ This re-runs the search configuration interview: which roles to target, which sk
 
 ### LaTeX templates
 
-The CV uses [moderncv](https://ctan.org/pkg/moderncv) (banking style). The cover letter uses a custom `cover.cls` with Lato/Raleway fonts. You can replace these with your own templates; just update the guidance in `05-cv-templates.md` and `06-cover-letter-templates.md`.
+The resume uses a custom single-page `resume.cls` (article-based, compiled with `pdflatex`). The cover letter uses a custom `cover.cls` with Lato/Raleway fonts (compiled with `xelatex`, generated only when a posting requires one). You can replace these with your own templates; just update the guidance in `05-cv-templates.md` and `06-cover-letter-templates.md`.
 
 ### Job search tools
 
-The four Danish CLI tools in `.agents/skills/` (Jobbank, Jobdanmark, Jobindex, Jobnet) demonstrate the pattern for building a job-portal integration for a specific market. If you're in a different country, you can build equivalent tools for your local job portals using the same structure.
+The `linkedin-search` CLI in `.agents/skills/` is a country-agnostic worked example of the job-portal integration pattern. If you want deeper coverage of a specific board (Indeed, OCC, Computrabajo, a company ATS), you can build an equivalent tool for it using the same structure.
 
 For a **country-agnostic** starting point, the repo also includes **`linkedin-search`** — a job-search skill built on LinkedIn's public, unauthenticated `jobs-guest` endpoints. It is field-agnostic, has **zero runtime dependencies** (runs with just `bun`), and takes the search location as an explicit flag, so it works for any market out of the box (`-l "Berlin, Germany"`, `-l "Mumbai, Maharashtra, India"`, `-l "Remote"`, …). It is intended for **personal use only** — automated access is against LinkedIn's Terms of Service, so keep volume low. See `.agents/skills/linkedin-search/SKILL.md`.
 
