@@ -1,0 +1,160 @@
+\section{Projects}
+
+\resumeHeadingListStart{}
+\vspace{-2mm}
+
+{
+  \resumeTrioHeading{Autonomous AMR--UAV Cooperative Navigation
+  }{Python, ROS2, OpenCV, EKF, NVIDIA Jetson, Gazebo}{2026}
+  \vspace{-2mm}
+  \resumeItemListStart{}
+  {
+    \resumeItem{Constructed an aerial-to-occupancy-grid pipeline that stitches 500+ drone frames into a full-coverage Nav2 map of an arena via a similarity-transform formulation, 3-pass obstacle consistency estimation, and confidence-weighted rasterization, leveraging SuperPoint, and pose graph optimization at 94\% obstacle recall.}
+    \resumeItem{Authored a map fusion pipeline, estimating rigid SE(2) transforms between a drone-built prior and a live LiDAR SLAM Toolbox grid via FFT coarse search and ICP median outlier rejection, with $\leq$20 cm residual error in $\sim$15 iterations.}
+    \resumeItem{Built a 5-state EKF from scratch fusing wheel odometry, IMU, and Isaac ROS cuVSLAM velocity, using adaptive gating to reject loop-closure spikes and reduce GPS-denied dead-reckoning drift by 38\%.}
+    % \resumeItem{Built an aerial ArUco localization module that recovers goal-marker world poses through a 45$^\circ$ mirror rig and IPPE PnP, robustified by Weiszfeld geometric-median aggregation and an IRLS bias-calibration model to $\sim$3 cm accuracy across 120+ observations.}
+    % \resumeItem{Developed the UAV position controller (PID + feedforward boustrophedon coverage with sliding-window tracking-fault detection) and the AMR motion stack (A* + arc-length cubic-spline planning under feedback-linearizing control) at $<$10 cm path-tracking error.}
+    % \resumeItem{Hardend the system with a sub-350 ms LiDAR automatic-emergency-braking layer, an application-layer ROS2 security middleware (RSA-PSS + AES-256-GCM SecureEnvelope), and a 12-stage mission orchestrator coordinating 3 networked compute nodes over SSH and DDS.}
+  }
+  \resumeItemListEnd{}
+}
+\vspace{-3mm}
+
+{
+  \resumeTrioHeading{High-Performance C++23 Matching Engine Sim
+  }{C++, Linux, CMake, GoogleTest, Boost, FIX Protocol, Quill}{2026}
+  \vspace{-2mm}
+  \resumeItemListStart{}
+  {
+    \resumeItem{Building a high-performance, multi-threaded C++23 matching engine simulating a NASDAQ-style exchange with price-time priority order books, lock-free queues, and sharded architecture, targeting 10M+ events/sec on consumer-grade CPUs across 100+ symbols.}
+    % \resumeItem{Designing concurrent infrastructure (thread pool, global event sequencer, async logging) using optimizations, enabling deterministic event ordering, O(1) order management, parallel processing, and 95\%+ tested code coverage.}
+  }
+  \resumeItemListEnd{}
+}
+\vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{Soft Real-Time Control System for 2-DOF Robotic Arm}{C, PID controller, Kalman filter, CMSIS DSP, GDB}{2025}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     \resumeItem{Theorized and applied a PD control with state estimation via a refined implementation of a Kalman filter.}
+%     \resumeItem{Derived the dynamic model of a robotic arm using the Lagrangian approach and evaluated its stability with Lyapunov methods.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{Financial health analysis}{Excel, SQL, Python}{2023}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     % \resumeItem{Conducted comprehensive financial analysis of Walmart’s quarterly and annual reports to derive key profitability, liquidity, and efficiency metrics.} % ORIGINAL
+%     \resumeItem{Evaluated Walmart’s financial statements to assess profitability, liquidity, and efficiency metrics.} % SHORTER
+%     \resumeItem{Performed a 20-year trend analysis to evaluate long-term financial performance, using Python and SQL for data processing and visualization, leading to predictive insights on future growth trajectories.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+{
+  \resumeTrioHeading{Automated Optical PCB Inspection}{C++, YOLOv8, NVIDIA Jetson, TensorRT, Python, Linux, Docker}{2024}
+  \vspace{-2mm}
+  \resumeItemListStart{}
+  {
+    \resumeItem{Led the development of an embedded Linux-based PCB scanning system integrating RGB and thermal imaging, combining DSP pipelines and deep learning to achieve a 50\% faster analysis workflow than manual inspection.}
+    \resumeItem{Deployed TensorRT optimized foundational ML models for real-time image pre-processing and I2C/UART hardware communication, building a 10K+ image dataset enabling 25 PCB defect classes at 95\% accuracy in under 5 seconds.}
+  }
+  \resumeItemListEnd{}
+}
+\vspace{-3mm}
+
+{
+  \resumeTrioHeading{Custom Soft Processor in FPGA}{Verilog, FPGA, ModelSim, Intel Quartus}{2024}
+  \resumeItemListStart{}
+  \vspace{-3mm}
+  {
+    \resumeItem{Designed and implemented a custom 32-bit soft-core CPU in Verilog, inspired by ARM Cortex-M0, including ALU, control unit, register file, and pipelined datapath.}
+    \resumeItem{Developed a comprehensive verification suite (50+ test cases) in ModelSim, validating instruction execution, control flow, and edge cases; successfully deployed and tested on Intel Altera FPGA hardware.}
+  }
+  \resumeItemListEnd{}
+}
+\vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{Autonomous Drone SLAM \& Obstacle Avoidance}{ROS, C++, Python, DJI Tello}{2023}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     \resumeItem{Adapted ORB-SLAM2 to interface with a DJI Tello over ROS, achieving real-time 3D mapping with 1--3 s latency during live flight without external localization.}
+%     \resumeItem{Engineered a point-cloud obstacle avoidance pipeline on real hardware, cutting collision incidents by 90\%; awarded 3rd place at the 2023 Mexican Robotics Tournament and co-authored a \href{https://drive.google.com/file/d/1iew2uK32hW05d_gr59AYtQqjh2w3HW2S/view?usp=sharing}{\uline{technical report}}.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{Evaluation of ADAS Cameras - Bosch Hackathon}{Python, OpenCV, ML, ISO Standards}{2023}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     \resumeItem{Obtained 1st place by Leveraging OpenCV, ML, and ISO Standards to build the solution.}
+%     \resumeItem{Engineered image analysis algorithms that reduced ADAS camera quality control time to under 5 seconds per unit, boosting efficiency by 40\% and saving an estimated 20 hours of manual effort per week.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{MedWay IoT System}{Python, AWS, XGBoost, ESP-32, SQL}{2023}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     \resumeItem{Developed an IoT system to monitor medicine integrity in transit using embedded sensors (temperature, UV, GPS) with real-time data ingestion into AWS for real-time tracking and storage..}
+%     \resumeItem{Built an XGBoost-based analytics pipeline achieving 93\% accuracy, generating automated reports to assess drug safety and exposure risks.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{Design and analysis of plane fuselage}{Ansys Fluent, Solidworks, Matlab}{2023}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     \resumeItem{Led aerodynamics design for an RC plane, increasing flight stability by 12\%, contributing to the team's overall performance.}
+%     \resumeItem{Utilized Ansys and SolidWorks to optimize RC plane body configurations, testing 20+ combinations to balance aerodynamic performance and mechanical integrity.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{Hyper-Kamiokande Mexico - Automations}{Python, Docker, Linux}{2023}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     \resumeItem{Engineered a containerized (Singularity/Docker) environment for a neutrino physics deep learning pipeline, standardizing deployment and eliminating environment inconsistencies across research workflows.}
+%     \resumeItem{Reduced scientific computing environment setup time by over 8x, significantly accelerating experiment reproducibility and researcher productivity.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+% {
+%   \resumeTrioHeading{FIRST Robotics Competition}{Solidworks, C++, hand power tools}{2021}
+%   \vspace{-2mm}
+%   \resumeItemListStart{}
+%   {
+%     \resumeItem{Created the elevator system for the competition robot with SolidWorks, enabling the robot to hang from heights.}
+%     \resumeItem{Designed and simulated five elevator configurations to optimize for robot agility while conserving robustness.}
+%     \resumeItem{Co-led the manufacturing process by providing insight into the mechanical design of the robot to the team.}
+%   }
+%   \resumeItemListEnd{}
+% }
+% \vspace{-3mm}
+
+\vspace{-2mm}
+
+\resumeHeadingListEnd{}
