@@ -1,9 +1,9 @@
 ---
 name: job-scraper
 description: >
-  Scrapes Danish job sites for new positions matching your profile. Deduplicates across runs.
+  Scrapes job sites (Mexico, US, and international) for new positions matching your profile. Deduplicates across runs.
   Triggers on: job scrape, find jobs, search jobs, new jobs, job search, scrape jobs, /scrape
-allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch, WebSearch, Agent, AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(bun run:*), WebFetch, WebSearch, Agent, AskUserQuestion
 ---
 
 # Job Scraper
@@ -12,7 +12,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, WebFetch, WebSearch, Agent, AskUse
 
 ## How It Works
 
-This skill searches multiple Danish job sites using targeted queries based on your profile, deduplicates against previously seen jobs and the application tracker, and presents new matches with a quick fit assessment.
+This skill searches multiple job boards (Mexican, US, and international) using targeted queries based on your profile, deduplicates against previously seen jobs and the application tracker, and presents new matches with a quick fit assessment. It uses two paths: the country-agnostic **LinkedIn CLI** (`bun run .agents/skills/linkedin-search/cli/src/cli.ts ...`) for structured results, and **WebSearch/WebFetch** for board-agnostic coverage (Indeed, OCC, Computrabajo, Glassdoor, and company ATS pages on Greenhouse/Lever/Ashby).
 
 ## Invocation
 
@@ -35,16 +35,19 @@ Optional arguments:
 1. Read `job_scraper/seen_jobs.json` (create if missing - start with `{"seen": {}}`)
 2. Read `job_search_tracker.csv` to extract already-applied companies+roles
 3. Read `search-queries.md` (this directory) for the search strategy
+4. Read `target-countries.md` (repo root) for the location/visa tier policy
 
 ### Step 1: Search
 
-Run **WebSearch** queries from `search-queries.md`. By default, run the top 3 priority categories. If the user said "broad", run all categories.
+Run the queries from `search-queries.md`. By default, run the top 3 priority categories. If the user said "broad", run all categories.
 
-If the user specified a focus area (e.g. "data science"), prioritize queries from that category.
+If the user specified a focus area (e.g. "robotics", "compilers", "mexico"), prioritize queries from that category.
 
-For each search:
-- Use `WebSearch` with site-specific queries (jobindex.dk, linkedin.com/jobs, karriere.dk, etc.)
-- Target your configured geographic area
+For each search, use both paths from `search-queries.md`:
+- **LinkedIn CLI** for structured, deduplicable results:
+  `bun run .agents/skills/linkedin-search/cli/src/cli.ts search -q "<query>" -l "<location>" --jobage 14 --format json`
+- **WebSearch** with site-specific queries (linkedin.com/jobs, mx.indeed.com, occ.com.mx, mx.computrabajo.com, glassdoor.com, boards.greenhouse.io, jobs.lever.co, jobs.ashbyhq.com)
+- Sweep the configured markets (US, Mexico — Guadalajara/CDMX/Monterrey/remote — and international per `target-countries.md`)
 - Look for postings from the last 14 days
 
 ### Step 2: Fetch & Parse
@@ -117,7 +120,7 @@ If the user decides to apply to any job, add a row to `job_search_tracker.csv`.
 
 1. **Never fabricate job postings.** Only present jobs found via actual WebSearch/WebFetch results.
 2. **Respect deduplication.** Always check seen_jobs.json AND job_search_tracker.csv before presenting.
-3. **Focus on configured geographic area.** Skip jobs that require relocation or are clearly outside commute range.
+3. **Apply the country/visa policy.** Use `target-countries.md`: present Tier 1–2 first, include Tier 3 with a "visa-dependent" flag, and drop Tier 4 (and hard requirements like US-citizen/clearance/ITAR). Remote-worldwide/Americas-timezone always passes.
 4. **Only open positions.** Skip postings with expired deadlines or those marked as closed.
 5. **Be efficient with WebFetch.** Don't fetch every search result - use titles and snippets to pre-filter before fetching.
 6. **Parallel searches.** Use the Agent tool or parallel WebSearch calls to speed up the search phase.
