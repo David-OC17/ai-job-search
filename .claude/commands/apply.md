@@ -259,3 +259,14 @@ List the files written:
 - `cover_letters/cover_<company>_<role>.tex` — **only if** a cover letter was generated
 
 Tell the user which files are ready for review, and note explicitly whether a cover letter was produced or skipped. Ask them to open the PDF(s) before sending.
+
+### Record the application status
+Mark the role as applied in the canonical store so it stays deduped and shows under
+"Applied" in `/roles`:
+```bash
+python3 tools/jobs.py applied "<job-url-or-id>" --company "<Company>" --title "<Role>" --location "<Location>"
+python3 tools/jobs.py render
+```
+Also add a row to `job_search_tracker.csv` (your permanent applied record). Do this only
+once David confirms he is actually applying — if he is still reviewing, leave the status as
+is and remind him he can run `/roles` or `/not-apply` later.
