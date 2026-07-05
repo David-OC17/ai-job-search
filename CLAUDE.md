@@ -85,7 +85,7 @@ All application documents are written in **English**.
 - `cover_letters/` - LaTeX cover letters (custom `cover.cls`), generated on demand only
 - `target-countries.md` - country/visa tier policy that gates which openings to pursue
 - `.claude/commands/` - slash commands: `apply`, `setup`, `expand`, `reset`, and the tracking commands `roles` (human-readable status view) and `not-apply` (register a deliberate skip)
-- `.claude/skills/` - AI skill definitions (`job-application-assistant`, `job-scraper`, `upskill`)
+- `.claude/skills/` - AI skill definitions (`job-application-assistant`, `scrape`, `upskill`)
 - `.agents/skills/linkedin-search/` - country-agnostic LinkedIn job-search CLI (Bun)
 - `tools/jobs.py` - job status manager + renderer backing `/roles` and `/not-apply`
 - `job_scraper/` (git-ignored, personal) - `seen_jobs.json` is the canonical dedup memory + per-role status; `roles.md` is the generated human view; `matches-YYYY-MM-DD.md` are per-scrape shortlists

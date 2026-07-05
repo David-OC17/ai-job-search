@@ -125,7 +125,7 @@ ai-job-search/
 │   │   │   ├── 05-cv-templates.md     # resume.cls structure + tailoring rules
 │   │   │   ├── 06-cover-letter-templates.md # LaTeX cover letter templates (on demand)
 │   │   │   └── 07-interview-prep.md   # STAR examples + interview framework
-│   │   ├── job-scraper/               # Job search orchestration
+│   │   ├── scrape/                    # /scrape job search orchestration
 │   │   └── upskill/                   # /upskill skill gap analysis and learning plan
 │   └── settings.json                  # Claude Code permissions (shared, scoped)
 ├── target-countries.md                # Country/visa tier policy gating which openings to pursue

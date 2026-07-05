@@ -1,12 +1,12 @@
 ---
-name: job-scraper
+name: scrape
 description: >
   Scrapes job sites (Mexico, US, and international) for new positions matching your profile. Deduplicates across runs.
-  Triggers on: job scrape, find jobs, search jobs, new jobs, job search, scrape jobs, /scrape
+  Triggers on: /scrape, job scrape, find jobs, search jobs, new jobs, job search, scrape jobs
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(bun run:*), WebFetch, WebSearch, Agent, AskUserQuestion
 ---
 
-# Job Scraper
+# Scrape (job scraper)
 
 ---
 
