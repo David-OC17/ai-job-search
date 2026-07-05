@@ -11,19 +11,19 @@ An AI-powered job application framework built on [Claude Code](https://claude.co
 A structured workflow that turns Claude Code into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**. This fork is adapted for the **US, Mexico, and international** job markets: it searches via the country-agnostic LinkedIn CLI plus WebSearch across Indeed, OCC, Computrabajo, Glassdoor, and company ATS boards, and gates results with a country/visa policy (`target-countries.md`).
 
 ```
-/setup          /scrape              /apply <url>
-  |                |                     |
-  v                v                     v
-Fill in        Search job           Evaluate fit
-your profile   portals              Score & recommend
-  |                |                     |
-  v                v                     v
-Profile        Present matches      Draft CV + Cover Letter
-files ready    with fit ratings     (LaTeX, tailored)
-                   |                     |
-                   v                     v
-               Pick a match         Reviewer agent critiques
-               -> /apply            -> Revise -> Final output
+/setup          /scrape              /apply <url>          /roles · /not-apply
+  |                |                     |                        |
+  v                v                     v                        v
+Fill in        Search job           Evaluate fit             Track your
+your profile   portals              Score & recommend        pipeline
+  |                |                     |                    (applied /
+  v                v                     v                     not-applying /
+Profile        Present matches      Tailor 1-page resume      seen ...)
+files ready    + shortlist file    (comment-toggle; cover
+                   |                 letter on demand)
+                   v                     |
+               Pick a match             v
+               -> /apply            Reviewer agent -> Revise -> Compile -> Final
 ```
 
 The framework encodes career guidance best practices, including structured evaluation criteria, forward-looking cover letter framing, and optional salary benchmarking.
@@ -86,7 +86,16 @@ This runs the full workflow: evaluate fit, draft CV + cover letter, review with 
 
 ## Other commands
 
-`/setup`, `/scrape`, and `/apply` form the core workflow. Two more commands extend it once your profile is in place:
+`/setup`, `/scrape`, and `/apply` form the core workflow. Additional commands extend it once your profile is in place.
+
+**Tracking your pipeline:**
+
+- **`/roles [status]`** renders every tracked role (applied, not-applying, rejected, planned, seen, freshly scraped) from `job_scraper/seen_jobs.json` into a human-readable `job_scraper/roles.md`, grouped by status. Optional filter, e.g. `/roles applied` or `/roles not-applying`. The JSON stays as the deduplication memory; `roles.md` is the browsable view.
+- **`/not-apply <url | id | text> [reason]`** registers a job you're *deliberately skipping* — a neutral "read it, passing" marker, not a fit-rejection. It's recorded so `/scrape` never resurfaces it and it shows under "Not applying" in `/roles`.
+
+Both are backed by `tools/jobs.py`, a small CLI that mutates `seen_jobs.json` and renders the Markdown views (also usable directly: `python3 tools/jobs.py render`, `... applied <ref>`, `... set-status <ref> <status>`).
+
+**Profile & analysis:**
 
 - **`/expand`** enriches your profile by scanning public sources you've already linked in it (GitHub repos, portfolio site, Kaggle, Google Scholar) and looking up syllabi for named courses and certifications. Discovered competencies are added to your profile with a source tag. Useful right after `/setup` to surface skills that documents alone don't make explicit.
 - **`/upskill`** analyzes the gap between your profile and your tracked job postings (or a single posting via `/upskill <URL>`). Produces a prioritized heatmap of skill gaps and a learning plan with web-searched study resources and time estimates. Useful for career planning between applications.
@@ -103,6 +112,8 @@ ai-job-search/
 │   │   ├── apply.md                   # /apply workflow (drafter-reviewer)
 │   │   ├── setup.md                   # /setup onboarding (documents folder, CV import, or interview)
 │   │   ├── expand.md                  # /expand competency enrichment from documents and online presence
+│   │   ├── roles.md                   # /roles human-readable view of all tracked roles by status
+│   │   ├── not-apply.md               # /not-apply register a job you're deliberately skipping
 │   │   └── reset.md                   # /reset wipe profile data or documents folder
 │   ├── skills/
 │   │   ├── job-application-assistant/  # Core application skill
@@ -136,11 +147,15 @@ ai-job-search/
 │   └── applications/                  # Past application records (<company>_<role>/)
 ├── salary_lookup.py                   # Salary benchmarking tool (BYO data)
 ├── tools/
+│   ├── jobs.py                        # Job status manager + renderer (/roles, /not-apply)
 │   ├── convert_salary_excel.py        # Convert salary Excel to JSON
 │   └── README_SALARY_TOOL.md          # Salary tool setup instructions
-├── job_scraper/                       # Scraper state (seen jobs, results)
+├── job_scraper/                       # Scraper state (all git-ignored, personal)
+│   ├── seen_jobs.json                 # Canonical dedup memory + per-role status
+│   ├── roles.md                       # Human-readable roles view (generated by /roles)
+│   └── matches-YYYY-MM-DD.md          # Per-run shortlist checklists (generated by /scrape)
 ├── upskill/                           # /upskill report output (markdown reports per run)
-├── job_search_tracker.csv             # Application tracking spreadsheet
+├── job_search_tracker.csv             # Application tracking spreadsheet (permanent applied record)
 └── SETUP.md                           # Detailed setup guide
 ```
 
@@ -156,12 +171,12 @@ The `/apply` command runs a **drafter-reviewer workflow** with mandatory PDF com
 6. **Compile and inspect** the PDF(s): pdflatex for the resume, xelatex for a cover letter. Claude reads the rendered pages and iterates on the LaTeX until the resume is exactly 1 page with no orphaned entry titles (and any cover letter is exactly 1 page with the signature visible and fonts consistent).
 7. **Present** the final output with a verification checklist
 
-All claims in the resume and cover letter are verified against your actual profile. Tailoring means selecting from existing content variants — the system never fabricates skills or experience.
+All claims in the resume and cover letter are verified against your actual profile. **Tailoring is limited to commenting existing content variants in or out** — the master resume ships alternate and shorter bullet/project variants for this purpose. The system never fabricates skills or experience, and any actual wording change to the resume `.tex` files is proposed to you for approval before it is written.
 
 ### What makes this workflow different
 
-- **PDF verification loop.** Most LaTeX-resume templates produce "looks fine in the .tex" output that breaks in the PDF: job titles orphan to the next page, cover letters spill onto page 2, bullet fonts silently fall back to the body font. The `/apply` command compiles and visually inspects every PDF and applies targeted fixes (`\needspace`, `\enlargethispage`, font-matching wrappers for list items) until the layout is clean. This runs automatically on every application.
-- **Relevance-weighted CV cutting.** When a CV overflows 2 pages, the workflow does not cut mechanically from the "oldest" section. It scores each candidate line by (a) relevance to the target posting, (b) uniqueness in the document, and (c) whether the cover letter depends on it, and cuts the lowest-total-score line first. An older-role bullet that hits posting keywords survives ahead of a recent-role bullet that does not.
+- **PDF verification loop.** LaTeX resumes produce "looks fine in the .tex" output that breaks in the PDF: a role title orphans to the next page, a resume spills onto page 2, a cover letter's bullet font silently falls back to the body font. The `/apply` command compiles (`pdflatex` for the resume, `xelatex` for a cover letter) and visually inspects every PDF, iterating until the layout is clean. This runs automatically on every application.
+- **Relevance-weighted fitting.** The resume must land on exactly one page. Rather than cutting from the "oldest" section, the workflow scores each candidate line by (a) relevance to the target posting, (b) uniqueness, and (c) whether a cover letter depends on it, then comments out the lowest-total-score variants first. An older-role bullet that hits posting keywords survives ahead of a recent one that does not.
 - **Drafter-reviewer separation.** The drafter writes; a second Claude agent, spawned with a fresh context, researches the company and critiques the drafts. The drafter then revises. This catches missed keywords, weak framing, and generic language that a single pass often leaves in.
 - **Token-efficient reviewer dispatch.** The reviewer agent receives drafts inline rather than re-reading them, and the verification checklist runs once at the end of the workflow rather than being duplicated by both agents. Note: the new compile-and-inspect step in Step 5 spends some of those savings on PDF rendering and layout iteration — the workflow trades some end-to-end token cost for a real reduction in broken PDFs reaching the user.
 
@@ -177,9 +192,11 @@ If you prefer editing files directly instead of using `/setup`:
 | `01-candidate-profile.md` | Structured version of your CV data |
 | `02-behavioral-profile.md` | Your behavioral assessment or self-assessment |
 | `04-job-evaluation.md` | Skill match areas, career goals, motivation filters |
-| `05-cv-templates.md` | Profile statement templates for different role types |
+| `05-cv-templates.md` | Resume tailoring rules (which section variants to enable per role type) |
 | `07-interview-prep.md` | Your STAR examples from actual experience |
 | `search-queries.md` | Job search queries for your skills and location |
+| `target-countries.md` | Country/visa tiers deciding which openings to pursue or skip |
+| `cv/sections/*.tex` | Your actual resume content (add/adjust the commented bullet & project variants) |
 
 ### Updating your search queries
 

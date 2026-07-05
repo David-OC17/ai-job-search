@@ -143,6 +143,15 @@ Claude will:
 4. Have a reviewer agent critique the drafts
 5. Revise and present the final output
 
+To find roles in the first place, run `/scrape` (optionally with a focus, e.g. `/scrape robotics` or `/scrape broad`). It writes a shortlist checklist to `job_scraper/matches-YYYY-MM-DD.md`.
+
+### Tracking your pipeline
+
+- `/roles [status]` — render every tracked role into `job_scraper/roles.md`, grouped by status (applied, not-applying, rejected, planned, seen, new). Filter with e.g. `/roles applied`.
+- `/not-apply <url | id | text> [reason]` — register a job you're deliberately skipping so it never resurfaces in `/scrape` (a neutral marker, not a fit-rejection).
+
+Both are backed by `tools/jobs.py`, which mutates `job_scraper/seen_jobs.json` (Claude's canonical dedup memory) and renders the human-readable views. These files, plus `job_search_tracker.csv`, are git-ignored — your job history stays local.
+
 ## 7. Compile your documents
 
 `/apply` builds a tailored resume under `cv/applications/<Company>/`. To compile manually:

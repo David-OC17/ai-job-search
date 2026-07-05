@@ -84,8 +84,15 @@ All application documents are written in **English**.
 - `cv/` - David's custom LaTeX resume: `resume.cls` (class), `resume.tex` (master), `sections/*.tex` (content with commented bullet/project variants to select per role). Per-company tailored copies go under `cv/applications/<Company>/` (git-ignored).
 - `cover_letters/` - LaTeX cover letters (custom `cover.cls`), generated on demand only
 - `target-countries.md` - country/visa tier policy that gates which openings to pursue
-- `.claude/skills/` - AI skill definitions for the application workflow
+- `.claude/commands/` - slash commands: `apply`, `setup`, `expand`, `reset`, and the tracking commands `roles` (human-readable status view) and `not-apply` (register a deliberate skip)
+- `.claude/skills/` - AI skill definitions (`job-application-assistant`, `job-scraper`, `upskill`)
 - `.agents/skills/linkedin-search/` - country-agnostic LinkedIn job-search CLI (Bun)
+- `tools/jobs.py` - job status manager + renderer backing `/roles` and `/not-apply`
+- `job_scraper/` (git-ignored, personal) - `seen_jobs.json` is the canonical dedup memory + per-role status; `roles.md` is the generated human view; `matches-YYYY-MM-DD.md` are per-scrape shortlists
+- `job_search_tracker.csv` (git-ignored) - permanent record of roles actually applied to
+
+## Job status vocabulary (in `seen_jobs.json`)
+`applied`, `interview`, `assessment`, `pending` (plan to apply), `not_applying` (deliberate skip - neutral, not a fit-rejection), `rejected`, `seen` (logged, no action), `new` (freshly scraped). Mutate via `tools/jobs.py` (`applied`/`not-apply`/`set-status`), never by hand-editing the JSON.
 
 ## Workflow for New Job Applications
 1. User provides a job posting (URL or text)
