@@ -87,7 +87,12 @@ For each new job, do a rapid fit check (NOT the full evaluation from `04-job-eva
 
 ### Step 5: Present Results
 
-Present new jobs in a table sorted by fit (high first):
+**Always write a persistent, human-readable shortlist file** so David can browse and action matches after the run, not just in chat. Write `job_scraper/matches-YYYY-MM-DD.md` (git-ignored) as a checklist:
+- One `- [ ] <emoji> **Title** — Company · Location · Date · [link](url) · \`/apply <url>\`` line per new high/medium match (and a separate section for any visa/ITAR-flagged ones)
+- Grouped by fit (🟢 high, 🟡 medium, ⚠️ flagged); low-fit roles stay only in `seen_jobs.json`
+- If a file for today already exists, append/merge rather than clobbering earlier ticks
+
+Tell David the file path so he can open it. Then also present new jobs in chat as a table sorted by fit (high first):
 
 ```
 ## New Job Matches - YYYY-MM-DD
