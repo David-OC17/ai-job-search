@@ -72,7 +72,7 @@ The font wrapper is mandatory — if you just move `\begin{itemize}` outside `\l
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     TITLE NAME
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\namesection{}{\Huge{[YOUR_NAME]}}{  \href{mailto:[YOUR_EMAIL]}{[YOUR_EMAIL]} | [YOUR_PHONE] |  \urlstyle{same}\href{[YOUR_LINKEDIN_URL]}{LinkedIn}
+\namesection{}{\Huge{David Ortiz Cota}}{  \href{mailto:david@dortizc.com}{david@dortizc.com} | +52 3311867587 |  \urlstyle{same}\href{https://linkedin.com/in/daveoc01}{LinkedIn}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -101,7 +101,7 @@ The font wrapper is mandatory — if you just move `\begin{itemize}` outside `\l
 \begin{flushright}
 \closing{Kind regards,\\}
 
-\signature{[YOUR_NAME]}
+\signature{David Ortiz Cota}
 \end{flushright}
 \end{document}
 ```
