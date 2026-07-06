@@ -5,8 +5,10 @@ Single source of truth: job_scraper/seen_jobs.json (Claude's dedup memory).
 This tool mutates status there and renders readable Markdown for humans.
 
 Usage:
-  python tools/jobs.py not-apply <ref> [--reason R] [--title T] [--company C] [--location L] [--url U]
-  python tools/jobs.py applied   <ref> [--reason R] ... (same optional fields)
+  python tools/jobs.py register  <ref> [status] [--reason R] [--title T] [--company C] [--location L] [--url U]
+  python tools/jobs.py update    <ref> <status> [--reason R] ...
+  python tools/jobs.py not-apply <ref> [--reason R] ...      (sets status 'ignore')
+  python tools/jobs.py applied   <ref> [--reason R] ...
   python tools/jobs.py set-status <ref> <status> [--reason R] ...
   python tools/jobs.py render [--out job_scraper/roles.md]
   python tools/jobs.py find <query>
@@ -14,26 +16,38 @@ Usage:
 <ref> may be a LinkedIn URL, a numeric job id, or free text matched against
 company/title. If it matches nothing, a new entry is created from the flags.
 
-Statuses: applied, interview, assessment, pending, not_applying, rejected, seen, new
+Statuses: new, seen, pending, ignore, applied, assessment, interview, offer, ghosted, rejected
+Setting an applied-stage status (applied/assessment/interview/offer/ghosted/rejected)
+also upserts a row in job_search_tracker.csv (the permanent applied record).
 """
-import argparse, json, os, re, sys, datetime
+import argparse, csv, json, os, re, sys, datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEEN = os.path.join(ROOT, "job_scraper", "seen_jobs.json")
+TRACKER = os.path.join(ROOT, "job_search_tracker.csv")
 TODAY = datetime.date.today().isoformat()
 
-STATUS_ORDER = ["applied", "interview", "assessment", "pending",
-                "not_applying", "rejected", "seen", "new"]
+# Display order: most advanced/positive first, exits and pre-application last.
+STATUS_ORDER = ["offer", "interview", "assessment", "applied", "pending",
+                "ghosted", "rejected", "ignore", "seen", "new"]
 STATUS_LABEL = {
-    "applied": "✅ Applied",
+    "offer": "🎉 Offer",
     "interview": "🎤 Interview",
     "assessment": "📝 Assessment",
+    "applied": "✅ Applied",
     "pending": "🕒 Plan to apply",
-    "not_applying": "🚫 Not applying (skipped)",
+    "ghosted": "👻 Ghosted (no response)",
     "rejected": "❌ Rejected",
+    "ignore": "🚫 Ignored (skipped)",
     "seen": "👁 Seen (no action)",
     "new": "🆕 New (from scrape)",
 }
+VALID = set(STATUS_ORDER)
+# Statuses that mean the job was actually applied to -> mirror into the tracker CSV.
+APPLIED_STAGE = {"applied", "assessment", "interview", "offer", "ghosted", "rejected"}
+TRACKER_COLS = ["date", "company", "sector", "role", "role_type", "channel",
+                "status", "contact_person", "fit_rating", "notes",
+                "cv_file", "cover_letter_file", "source"]
 
 
 def load():
@@ -88,9 +102,44 @@ def find_key(seen, ref):
             if n in norm(v.get("company", "")) or n in norm(v.get("title", "")) or n in norm(k)]
 
 
+def sync_tracker(entry):
+    """Mirror an applied-stage job into job_search_tracker.csv (upsert by url/company+role)."""
+    if entry.get("status") not in APPLIED_STAGE:
+        return
+    rows = []
+    if os.path.exists(TRACKER):
+        with open(TRACKER, newline="") as f:
+            rows = list(csv.DictReader(f))
+    url = (entry.get("url") or "").split("?")[0]
+    ck = norm(entry.get("company")) + "|" + norm(entry.get("title"))
+    match = None
+    for r in rows:
+        rurl = (r.get("source_url") or r.get("url") or "").split("?")[0]
+        if (url and rurl == url) or (norm(r.get("company")) + "|" + norm(r.get("role")) == ck):
+            match = r
+            break
+    if match:
+        match["status"] = entry["status"]
+        if not match.get("date"):
+            match["date"] = TODAY
+    else:
+        rows.append({"date": TODAY, "company": entry.get("company", ""), "sector": "",
+                     "role": entry.get("title", ""), "role_type": "", "channel": "",
+                     "status": entry["status"], "contact_person": "", "fit_rating": "",
+                     "notes": (f"loc: {entry.get('location')} | {url}" if entry.get("location") else url),
+                     "cv_file": "", "cover_letter_file": "", "source": "register"})
+    with open(TRACKER, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=TRACKER_COLS, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
+
+
 def set_status(args):
     data = load(); seen = data["seen"]
     status = args.status
+    if status not in VALID:
+        print(f"Invalid status '{status}'. Valid: {', '.join(STATUS_ORDER)}", file=sys.stderr)
+        sys.exit(2)
     keys = find_key(seen, args.ref)
     if len(keys) > 1:
         print(f"Ambiguous ref '{args.ref}' matched {len(keys)} entries:", file=sys.stderr)
@@ -127,8 +176,10 @@ def set_status(args):
         action = "created"
     save(data)
     e = seen[key]
+    sync_tracker(e)
     r = f" (reason: {e['reason']})" if e.get("reason") else ""
-    print(f"{action}: [{status}] {e.get('company') or '?'} — {e.get('title') or key}{r}")
+    tag = " [+tracker]" if status in APPLIED_STAGE else ""
+    print(f"{action}: [{status}] {e.get('company') or '?'} — {e.get('title') or key}{r}{tag}")
 
 
 def render(args):
@@ -188,12 +239,18 @@ def main():
         sp.add_argument("--reason"); sp.add_argument("--title")
         sp.add_argument("--company"); sp.add_argument("--location"); sp.add_argument("--url")
 
-    sp = sub.add_parser("not-apply"); add_common(sp); sp.set_defaults(status="not_applying", func=set_status)
+    sp = sub.add_parser("not-apply"); add_common(sp); sp.set_defaults(status="ignore", func=set_status)
     sp = sub.add_parser("applied"); add_common(sp); sp.set_defaults(status="applied", func=set_status)
-    sp = sub.add_parser("set-status")
-    sp.add_argument("ref"); sp.add_argument("status")
-    sp.add_argument("--reason"); sp.add_argument("--title")
-    sp.add_argument("--company"); sp.add_argument("--location"); sp.add_argument("--url")
+    # register: add a job you applied to (default status 'applied'); optional status positional
+    sp = sub.add_parser("register"); add_common(sp)
+    sp.add_argument("status", nargs="?", default="applied")
+    sp.set_defaults(func=set_status)
+    # update: change an existing job's status (status required)
+    sp = sub.add_parser("update"); add_common(sp)
+    sp.add_argument("status")
+    sp.set_defaults(func=set_status)
+    sp = sub.add_parser("set-status"); add_common(sp)
+    sp.add_argument("status")
     sp.set_defaults(func=set_status)
     sp = sub.add_parser("render"); sp.add_argument("--out"); sp.set_defaults(func=render)
     sp = sub.add_parser("find"); sp.add_argument("ref"); sp.set_defaults(func=find)

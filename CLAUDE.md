@@ -92,7 +92,13 @@ All application documents are written in **English**.
 - `job_search_tracker.csv` (git-ignored) - permanent record of roles actually applied to
 
 ## Job status vocabulary (in `seen_jobs.json`)
-`applied`, `interview`, `assessment`, `pending` (plan to apply), `not_applying` (deliberate skip - neutral, not a fit-rejection), `rejected`, `seen` (logged, no action), `new` (freshly scraped). Mutate via `tools/jobs.py` (`applied`/`not-apply`/`set-status`), never by hand-editing the JSON.
+`new` (freshly scraped), `seen` (logged, no action), `pending` (plan to apply), `ignore` (deliberate skip - neutral, not a fit-rejection), `applied`, `assessment`, `interview`, `offer`, `ghosted` (applied, no response), `rejected`. Pipeline: `applied → assessment → interview → offer`; exits are `rejected`/`ghosted`/`ignore`. Mutate via `tools/jobs.py` (`register`/`update`/`not-apply`/`applied`/`set-status`), never by hand-editing the JSON. Applied-stage statuses (applied/assessment/interview/offer/ghosted/rejected) are auto-mirrored into `job_search_tracker.csv`.
+
+## Tracking commands
+- `/register <job> [status]` - record a job you applied to (default `applied`); syncs the tracker
+- `/update <job> <status>` - change status when a company responds (interview/offer/rejected/ghosted/…)
+- `/not-apply <job> [reason]` - mark a deliberate skip (status `ignore`)
+- `/roles [status]` - render the human-readable status view (`job_scraper/roles.md`)
 
 ## Workflow for New Job Applications
 1. User provides a job posting (URL or text)

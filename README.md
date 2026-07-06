@@ -11,15 +11,15 @@ An AI-powered job application framework built on [Claude Code](https://claude.co
 A structured workflow that turns Claude Code into a full-stack job application assistant. The core workflow (self-profiling, fit evaluation, and the drafter-reviewer application pipeline) is **language- and country-agnostic**. This fork is adapted for the **US, Mexico, and international** job markets: it searches via the country-agnostic LinkedIn CLI plus WebSearch across Indeed, OCC, Computrabajo, Glassdoor, and company ATS boards, and gates results with a country/visa policy (`target-countries.md`).
 
 ```
-/setup          /scrape              /apply <url>          /roles · /not-apply
-  |                |                     |                        |
-  v                v                     v                        v
-Fill in        Search job           Evaluate fit             Track your
-your profile   portals              Score & recommend        pipeline
-  |                |                     |                    (applied /
-  v                v                     v                     not-applying /
-Profile        Present matches      Tailor 1-page resume      seen ...)
-files ready    + shortlist file    (comment-toggle; cover
+/setup          /scrape              /apply <url>        /register /update
+  |                |                     |               /roles /not-apply
+  v                v                     v                        |
+Fill in        Search job           Evaluate fit                 v
+your profile   portals              Score & recommend        Track your
+  |                |                     |                    pipeline
+  v                v                     v                    (applied →
+Profile        Present matches      Tailor 1-page resume      interview →
+files ready    + shortlist file    (comment-toggle; cover     offer ...)
                    |                 letter on demand)
                    v                     |
                Pick a match             v
@@ -90,10 +90,14 @@ This runs the full workflow: evaluate fit, draft CV + cover letter, review with 
 
 **Tracking your pipeline:**
 
-- **`/roles [status]`** renders every tracked role (applied, not-applying, rejected, planned, seen, freshly scraped) from `job_scraper/seen_jobs.json` into a human-readable `job_scraper/roles.md`, grouped by status. Optional filter, e.g. `/roles applied` or `/roles not-applying`. The JSON stays as the deduplication memory; `roles.md` is the browsable view.
-- **`/not-apply <url | id | text> [reason]`** registers a job you're *deliberately skipping* — a neutral "read it, passing" marker, not a fit-rejection. It's recorded so `/scrape` never resurfaces it and it shows under "Not applying" in `/roles`.
+- **`/roles [status]`** renders every tracked role from `job_scraper/seen_jobs.json` into a human-readable `job_scraper/roles.md`, grouped by status. Optional filter, e.g. `/roles applied` or `/roles ignore`. The JSON stays as the deduplication memory; `roles.md` is the browsable view.
+- **`/register <url | id | text> [status]`** records a job you applied to (default status `applied`), for applications made outside the `/apply` flow.
+- **`/update <url | id | text> <status>`** changes a job's status when a company responds (e.g. `/update <url> interview`).
+- **`/not-apply <url | id | text> [reason]`** marks a job you're *deliberately skipping* (status `ignore`) — a neutral "read it, passing" marker, not a fit-rejection, so `/scrape` never resurfaces it.
 
-Both are backed by `tools/jobs.py`, a small CLI that mutates `seen_jobs.json` and renders the Markdown views (also usable directly: `python3 tools/jobs.py render`, `... applied <ref>`, `... set-status <ref> <status>`).
+The status vocabulary: `new` · `seen` · `pending` · `ignore` · `applied` · `assessment` · `interview` · `offer` · `ghosted` · `rejected` (pipeline: `applied → assessment → interview → offer`; exits: `rejected` / `ghosted` / `ignore`). Applied-stage statuses are auto-mirrored into `job_search_tracker.csv`.
+
+All are backed by `tools/jobs.py`, a small CLI that mutates `seen_jobs.json`, syncs the tracker, and renders the Markdown views (also usable directly: `python3 tools/jobs.py render`, `... register <ref> <status>`, `... update <ref> <status>`).
 
 **Profile & analysis:**
 
@@ -113,7 +117,9 @@ ai-job-search/
 │   │   ├── setup.md                   # /setup onboarding (documents folder, CV import, or interview)
 │   │   ├── expand.md                  # /expand competency enrichment from documents and online presence
 │   │   ├── roles.md                   # /roles human-readable view of all tracked roles by status
-│   │   ├── not-apply.md               # /not-apply register a job you're deliberately skipping
+│   │   ├── register.md                # /register record a job you applied to (syncs the tracker)
+│   │   ├── update.md                  # /update change a job's status when a company responds
+│   │   ├── not-apply.md               # /not-apply mark a deliberate skip (status 'ignore')
 │   │   └── reset.md                   # /reset wipe profile data or documents folder
 │   ├── skills/
 │   │   ├── job-application-assistant/  # Core application skill

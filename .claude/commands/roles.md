@@ -4,8 +4,8 @@ Render every role Claude has tracked (applied, not-applying, rejected, planned, 
 freshly scraped) from `job_scraper/seen_jobs.json` into a readable Markdown file grouped by
 status. The JSON stays as Claude's dedup memory; this gives David a browsable list.
 
-`$ARGUMENTS` may optionally name a status to focus on: `applied`, `not-applying`, `pending`,
-`rejected`, `interview`, `assessment`, `seen`, `new` (or empty for everything).
+`$ARGUMENTS` may optionally name a status to focus on: `applied`, `ignore`, `pending`,
+`rejected`, `interview`, `assessment`, `offer`, `ghosted`, `seen`, `new` (or empty for everything).
 
 ## Steps
 
@@ -18,16 +18,17 @@ status. The JSON stays as Claude's dedup memory; this gives David a browsable li
    **summary counts line** into the chat.
 3. If `$ARGUMENTS` named a status, also show that section inline:
    - Applied → the "✅ Applied" section
-   - not-applying → the "🚫 Not applying (skipped)" section
+   - ignore → the "🚫 Ignored (skipped)" section
    - etc.
    Read the relevant section from `job_scraper/roles.md` (or grep the JSON) and present it
    as a compact table (Title · Company · Location · link · reason). Keep it short; if the
    section is long (>30 rows) summarize and point to the file.
-4. If David asks to change a status, use the tool:
-   - `python3 tools/jobs.py applied "<ref>"` — mark applied
-   - `python3 tools/jobs.py not-apply "<ref>" --reason "..."` — mark not-applying (or use `/not-apply`)
-   - `python3 tools/jobs.py set-status "<ref>" <status>` — any other status
+4. If David asks to change a status, use the tool (or the dedicated commands):
+   - `/register <ref> [status]` — record a job applied to (or `python3 tools/jobs.py register "<ref>" <status>`)
+   - `/update <ref> <status>` — change status on a response (or `python3 tools/jobs.py update "<ref>" <status>`)
+   - `/not-apply <ref> [reason]` — mark `ignore` (or `python3 tools/jobs.py not-apply "<ref>" --reason "..."`)
    Then re-run `render`.
 
-Status vocabulary: `applied`, `interview`, `assessment`, `pending`, `not_applying`,
-`rejected`, `seen`, `new`.
+Status vocabulary: `new`, `seen`, `pending`, `ignore`, `applied`, `assessment`,
+`interview`, `offer`, `ghosted`, `rejected`. Applied-stage statuses are auto-synced to
+`job_search_tracker.csv`.

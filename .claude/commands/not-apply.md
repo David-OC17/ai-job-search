@@ -1,10 +1,11 @@
 # /not-apply - Register a job you're deliberately skipping
 
-Mark a job as **not applying** — a deliberate skip, **not** a fit-rejection. David has
+Mark a job with status **`ignore`** — a deliberate skip, **not** a fit-rejection. David has
 read (or seen) the role and is choosing to pass (e.g. can't get authorization, timing,
 duplicate, or simply not pursuing it). This records it in `job_scraper/seen_jobs.json` so
-it stays deduped and never resurfaces in `/scrape`, and it appears under "Not applying"
-in the human-readable roles view.
+it stays deduped and never resurfaces in `/scrape`, and it appears under "Ignored (skipped)"
+in the human-readable roles view. (`ignore` is a pre-application skip — distinct from
+`rejected`, which is company-side, and `ghosted`, which is post-application silence.)
 
 `$ARGUMENTS` is the job reference plus an optional reason. The reference may be a **LinkedIn
 URL, a numeric job id, or free text** (company / title).

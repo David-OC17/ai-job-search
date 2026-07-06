@@ -267,6 +267,7 @@ Mark the role as applied in the canonical store so it stays deduped and shows un
 python3 tools/jobs.py applied "<job-url-or-id>" --company "<Company>" --title "<Role>" --location "<Location>"
 python3 tools/jobs.py render
 ```
-Also add a row to `job_search_tracker.csv` (your permanent applied record). Do this only
-once David confirms he is actually applying — if he is still reviewing, leave the status as
-is and remind him he can run `/roles` or `/not-apply` later.
+This also **auto-syncs a row into `job_search_tracker.csv`** (applied is an applied-stage
+status) — no manual CSV edit needed. Do this only once David confirms he is actually
+applying — if he is still reviewing, leave the status as is and remind him he can run
+`/register`, `/update`, `/roles`, or `/not-apply` later.
